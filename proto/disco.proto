@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = "./proto";
+
+service Disco {
+  rpc OnPlayerJoin (WithUserIDAndTime) returns (Empty) {};
+  rpc OnPlayerLeave (WithUserIDAndTime) returns (Empty) {};
+  rpc OnServerSave (WithTime) returns (Empty) {};
+  rpc OnServerStart (WithTime) returns (Empty) {};
+  rpc OnServerShutdown (WithTime) returns (Empty) {};
+  rpc DoServerStart (WithTime) returns (ResultResponse) {};
+  rpc DoServerShutdown (WithTime) returns (ResultResponse) {};
+  rpc DoWhitelistPlayer (WithUserID) returns (ResultResponse) {};
+}
+
+message MyRequest {
+  // Define request fields here
+}
+
+message MyResponse {
+  // Define response fields here
+}
+
+
+enum Result {
+    OK = 0;
+    ERROR = 1;
+}
+
+message WithUserID {
+    uint64 userid = 1;
+}
+
+message WithTime {
+    uint64 timestamp = 1;
+}
+
+message WithUserIDAndTime {
+    uint64 userid = 1;
+    uint64 timestamp = 2;
+}
+
+message Empty {
+}
+
+message ResultResponse {
+    Result result = 1;
+    optional uint32 code = 2;
+    optional string message = 3;
+}

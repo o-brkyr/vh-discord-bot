@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option go_package = "./proto";
+
+service Disco {
+  rpc OnPlayerJoin (WithUserIDAndTime) returns (Empty) {};
+  rpc OnPlayerLeave (WithUserIDAndTime) returns (Empty) {};
+  rpc OnServerSave (WithTime) returns (Empty) {};
+  rpc OnServerStart (WithTime) returns (Empty) {};
+  rpc OnServerShutdown (WithTime) returns (Empty) {};
+  rpc DoServerStart (WithTime) returns (ResultResponse) {};
+  rpc DoServerShutdown (WithTime) returns (ResultResponse) {};
+  rpc DoWhitelistPlayer (WithUserID) returns (ResultResponse) {};
+  rpc RecieveEvent (Event) returns (ResultResponse) {};
+
+  rpc RegisterMember (RegisterMessage) returns (ResultResponse) {};
+  rpc RegisterCharacter (RegisterMessage) returns (ResultResponse) {};
+}
+
+enum Result {
+    RESULT_OK = 0;
+    RESULT_ERROR = 1;
+}
+
+
+enum EventType {
+    EVENT_JOIN = 0;
+    EVENT_LEAVE = 1;
+    EVENT_START = 2;
+    EVENT_STARTING = 3;
+    EVENT_STARTED = 4;
+    EVENT_STOP = 5;
+    EVENT_STOPPING = 6;
+    EVENT_STOPPED = 7;
+    EVENT_SAVING = 8;
+    EVENT_SAVED = 9;
+}
+
+message WithUserID {
+    uint64 userid = 1;
+}
+
+message WithTime {
+    uint64 timestamp = 1;
+}
+
+message WithUserIDAndTime {
+    uint64 userid = 1;
+    uint64 timestamp = 2;
+}
+
+message Empty {
+}
+
+message ResultResponse {
+    Result result = 1;
+    optional uint32 code = 2;
+    optional string message = 3;
+}
+
+message Event {
+    EventType event = 1;
+    uint64 timestamp = 2;
+    optional string message =3;
+}
+
+message RegisterMessage {
+    string passed_name = 1;
+    uint64 snowflake = 2;
+    uint64 timestamp = 3;
+}
