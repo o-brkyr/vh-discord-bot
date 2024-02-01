@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import disco_pb2 as disco__pb2
+from generated import disco_pb2 as disco__pb2
 
 
 class DiscoStub(object):
@@ -16,12 +16,12 @@ class DiscoStub(object):
         """
         self.OnPlayerJoin = channel.unary_unary(
                 '/Disco/OnPlayerJoin',
-                request_serializer=disco__pb2.WithUserIDAndTime.SerializeToString,
+                request_serializer=disco__pb2.PlayerRequest.SerializeToString,
                 response_deserializer=disco__pb2.Empty.FromString,
                 )
         self.OnPlayerLeave = channel.unary_unary(
                 '/Disco/OnPlayerLeave',
-                request_serializer=disco__pb2.WithUserIDAndTime.SerializeToString,
+                request_serializer=disco__pb2.PlayerRequest.SerializeToString,
                 response_deserializer=disco__pb2.Empty.FromString,
                 )
         self.OnServerSave = channel.unary_unary(
@@ -34,10 +34,55 @@ class DiscoStub(object):
                 request_serializer=disco__pb2.WithTime.SerializeToString,
                 response_deserializer=disco__pb2.Empty.FromString,
                 )
-        self.OnServerShutdown = channel.unary_unary(
-                '/Disco/OnServerShutdown',
+        self.OnServerStarted = channel.unary_unary(
+                '/Disco/OnServerStarted',
                 request_serializer=disco__pb2.WithTime.SerializeToString,
                 response_deserializer=disco__pb2.Empty.FromString,
+                )
+        self.OnServerStop = channel.unary_unary(
+                '/Disco/OnServerStop',
+                request_serializer=disco__pb2.WithTime.SerializeToString,
+                response_deserializer=disco__pb2.Empty.FromString,
+                )
+        self.OnServerStopped = channel.unary_unary(
+                '/Disco/OnServerStopped',
+                request_serializer=disco__pb2.WithTime.SerializeToString,
+                response_deserializer=disco__pb2.Empty.FromString,
+                )
+        self.OnServerLastOrders = channel.unary_unary(
+                '/Disco/OnServerLastOrders',
+                request_serializer=disco__pb2.WithTime.SerializeToString,
+                response_deserializer=disco__pb2.Empty.FromString,
+                )
+        self.GetDaySchedule = channel.unary_stream(
+                '/Disco/GetDaySchedule',
+                request_serializer=disco__pb2.ScheduleRequest.SerializeToString,
+                response_deserializer=disco__pb2.ScheduleMessage.FromString,
+                )
+        self.GetWeekSchedule = channel.unary_stream(
+                '/Disco/GetWeekSchedule',
+                request_serializer=disco__pb2.Empty.SerializeToString,
+                response_deserializer=disco__pb2.ScheduleMessage.FromString,
+                )
+        self.SetDaySchedule = channel.unary_unary(
+                '/Disco/SetDaySchedule',
+                request_serializer=disco__pb2.ScheduleMessage.SerializeToString,
+                response_deserializer=disco__pb2.ResultResponse.FromString,
+                )
+        self.ClearDaySchedule = channel.unary_unary(
+                '/Disco/ClearDaySchedule',
+                request_serializer=disco__pb2.ScheduleRequest.SerializeToString,
+                response_deserializer=disco__pb2.ResultResponse.FromString,
+                )
+        self.QueryPlayers = channel.unary_stream(
+                '/Disco/QueryPlayers',
+                request_serializer=disco__pb2.Empty.SerializeToString,
+                response_deserializer=disco__pb2.QueryResponse.FromString,
+                )
+        self.QueryStatus = channel.unary_unary(
+                '/Disco/QueryStatus',
+                request_serializer=disco__pb2.Empty.SerializeToString,
+                response_deserializer=disco__pb2.ResultResponse.FromString,
                 )
         self.DoServerStart = channel.unary_unary(
                 '/Disco/DoServerStart',
@@ -49,24 +94,14 @@ class DiscoStub(object):
                 request_serializer=disco__pb2.WithTime.SerializeToString,
                 response_deserializer=disco__pb2.ResultResponse.FromString,
                 )
-        self.DoWhitelistPlayer = channel.unary_unary(
-                '/Disco/DoWhitelistPlayer',
-                request_serializer=disco__pb2.WithUserID.SerializeToString,
+        self.DoRegisterMember = channel.unary_unary(
+                '/Disco/DoRegisterMember',
+                request_serializer=disco__pb2.RegisterRequest.SerializeToString,
                 response_deserializer=disco__pb2.ResultResponse.FromString,
                 )
-        self.RecieveEvent = channel.unary_unary(
-                '/Disco/RecieveEvent',
-                request_serializer=disco__pb2.Event.SerializeToString,
-                response_deserializer=disco__pb2.ResultResponse.FromString,
-                )
-        self.RegisterMember = channel.unary_unary(
-                '/Disco/RegisterMember',
-                request_serializer=disco__pb2.RegisterMessage.SerializeToString,
-                response_deserializer=disco__pb2.ResultResponse.FromString,
-                )
-        self.RegisterCharacter = channel.unary_unary(
-                '/Disco/RegisterCharacter',
-                request_serializer=disco__pb2.RegisterMessage.SerializeToString,
+        self.DoRegisterCharacter = channel.unary_unary(
+                '/Disco/DoRegisterCharacter',
+                request_serializer=disco__pb2.RegisterRequest.SerializeToString,
                 response_deserializer=disco__pb2.ResultResponse.FromString,
                 )
 
@@ -98,7 +133,61 @@ class DiscoServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def OnServerShutdown(self, request, context):
+    def OnServerStarted(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def OnServerStop(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def OnServerStopped(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def OnServerLastOrders(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetDaySchedule(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetWeekSchedule(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetDaySchedule(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ClearDaySchedule(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def QueryPlayers(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def QueryStatus(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -116,25 +205,13 @@ class DiscoServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def DoWhitelistPlayer(self, request, context):
+    def DoRegisterMember(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def RecieveEvent(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def RegisterMember(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def RegisterCharacter(self, request, context):
+    def DoRegisterCharacter(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -145,12 +222,12 @@ def add_DiscoServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'OnPlayerJoin': grpc.unary_unary_rpc_method_handler(
                     servicer.OnPlayerJoin,
-                    request_deserializer=disco__pb2.WithUserIDAndTime.FromString,
+                    request_deserializer=disco__pb2.PlayerRequest.FromString,
                     response_serializer=disco__pb2.Empty.SerializeToString,
             ),
             'OnPlayerLeave': grpc.unary_unary_rpc_method_handler(
                     servicer.OnPlayerLeave,
-                    request_deserializer=disco__pb2.WithUserIDAndTime.FromString,
+                    request_deserializer=disco__pb2.PlayerRequest.FromString,
                     response_serializer=disco__pb2.Empty.SerializeToString,
             ),
             'OnServerSave': grpc.unary_unary_rpc_method_handler(
@@ -163,10 +240,55 @@ def add_DiscoServicer_to_server(servicer, server):
                     request_deserializer=disco__pb2.WithTime.FromString,
                     response_serializer=disco__pb2.Empty.SerializeToString,
             ),
-            'OnServerShutdown': grpc.unary_unary_rpc_method_handler(
-                    servicer.OnServerShutdown,
+            'OnServerStarted': grpc.unary_unary_rpc_method_handler(
+                    servicer.OnServerStarted,
                     request_deserializer=disco__pb2.WithTime.FromString,
                     response_serializer=disco__pb2.Empty.SerializeToString,
+            ),
+            'OnServerStop': grpc.unary_unary_rpc_method_handler(
+                    servicer.OnServerStop,
+                    request_deserializer=disco__pb2.WithTime.FromString,
+                    response_serializer=disco__pb2.Empty.SerializeToString,
+            ),
+            'OnServerStopped': grpc.unary_unary_rpc_method_handler(
+                    servicer.OnServerStopped,
+                    request_deserializer=disco__pb2.WithTime.FromString,
+                    response_serializer=disco__pb2.Empty.SerializeToString,
+            ),
+            'OnServerLastOrders': grpc.unary_unary_rpc_method_handler(
+                    servicer.OnServerLastOrders,
+                    request_deserializer=disco__pb2.WithTime.FromString,
+                    response_serializer=disco__pb2.Empty.SerializeToString,
+            ),
+            'GetDaySchedule': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetDaySchedule,
+                    request_deserializer=disco__pb2.ScheduleRequest.FromString,
+                    response_serializer=disco__pb2.ScheduleMessage.SerializeToString,
+            ),
+            'GetWeekSchedule': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetWeekSchedule,
+                    request_deserializer=disco__pb2.Empty.FromString,
+                    response_serializer=disco__pb2.ScheduleMessage.SerializeToString,
+            ),
+            'SetDaySchedule': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetDaySchedule,
+                    request_deserializer=disco__pb2.ScheduleMessage.FromString,
+                    response_serializer=disco__pb2.ResultResponse.SerializeToString,
+            ),
+            'ClearDaySchedule': grpc.unary_unary_rpc_method_handler(
+                    servicer.ClearDaySchedule,
+                    request_deserializer=disco__pb2.ScheduleRequest.FromString,
+                    response_serializer=disco__pb2.ResultResponse.SerializeToString,
+            ),
+            'QueryPlayers': grpc.unary_stream_rpc_method_handler(
+                    servicer.QueryPlayers,
+                    request_deserializer=disco__pb2.Empty.FromString,
+                    response_serializer=disco__pb2.QueryResponse.SerializeToString,
+            ),
+            'QueryStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.QueryStatus,
+                    request_deserializer=disco__pb2.Empty.FromString,
+                    response_serializer=disco__pb2.ResultResponse.SerializeToString,
             ),
             'DoServerStart': grpc.unary_unary_rpc_method_handler(
                     servicer.DoServerStart,
@@ -178,24 +300,14 @@ def add_DiscoServicer_to_server(servicer, server):
                     request_deserializer=disco__pb2.WithTime.FromString,
                     response_serializer=disco__pb2.ResultResponse.SerializeToString,
             ),
-            'DoWhitelistPlayer': grpc.unary_unary_rpc_method_handler(
-                    servicer.DoWhitelistPlayer,
-                    request_deserializer=disco__pb2.WithUserID.FromString,
+            'DoRegisterMember': grpc.unary_unary_rpc_method_handler(
+                    servicer.DoRegisterMember,
+                    request_deserializer=disco__pb2.RegisterRequest.FromString,
                     response_serializer=disco__pb2.ResultResponse.SerializeToString,
             ),
-            'RecieveEvent': grpc.unary_unary_rpc_method_handler(
-                    servicer.RecieveEvent,
-                    request_deserializer=disco__pb2.Event.FromString,
-                    response_serializer=disco__pb2.ResultResponse.SerializeToString,
-            ),
-            'RegisterMember': grpc.unary_unary_rpc_method_handler(
-                    servicer.RegisterMember,
-                    request_deserializer=disco__pb2.RegisterMessage.FromString,
-                    response_serializer=disco__pb2.ResultResponse.SerializeToString,
-            ),
-            'RegisterCharacter': grpc.unary_unary_rpc_method_handler(
-                    servicer.RegisterCharacter,
-                    request_deserializer=disco__pb2.RegisterMessage.FromString,
+            'DoRegisterCharacter': grpc.unary_unary_rpc_method_handler(
+                    servicer.DoRegisterCharacter,
+                    request_deserializer=disco__pb2.RegisterRequest.FromString,
                     response_serializer=disco__pb2.ResultResponse.SerializeToString,
             ),
     }
@@ -220,7 +332,7 @@ class Disco(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Disco/OnPlayerJoin',
-            disco__pb2.WithUserIDAndTime.SerializeToString,
+            disco__pb2.PlayerRequest.SerializeToString,
             disco__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -237,7 +349,7 @@ class Disco(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Disco/OnPlayerLeave',
-            disco__pb2.WithUserIDAndTime.SerializeToString,
+            disco__pb2.PlayerRequest.SerializeToString,
             disco__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -277,7 +389,7 @@ class Disco(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def OnServerShutdown(request,
+    def OnServerStarted(request,
             target,
             options=(),
             channel_credentials=None,
@@ -287,9 +399,162 @@ class Disco(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Disco/OnServerShutdown',
+        return grpc.experimental.unary_unary(request, target, '/Disco/OnServerStarted',
             disco__pb2.WithTime.SerializeToString,
             disco__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def OnServerStop(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Disco/OnServerStop',
+            disco__pb2.WithTime.SerializeToString,
+            disco__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def OnServerStopped(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Disco/OnServerStopped',
+            disco__pb2.WithTime.SerializeToString,
+            disco__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def OnServerLastOrders(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Disco/OnServerLastOrders',
+            disco__pb2.WithTime.SerializeToString,
+            disco__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetDaySchedule(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/Disco/GetDaySchedule',
+            disco__pb2.ScheduleRequest.SerializeToString,
+            disco__pb2.ScheduleMessage.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetWeekSchedule(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/Disco/GetWeekSchedule',
+            disco__pb2.Empty.SerializeToString,
+            disco__pb2.ScheduleMessage.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetDaySchedule(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Disco/SetDaySchedule',
+            disco__pb2.ScheduleMessage.SerializeToString,
+            disco__pb2.ResultResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ClearDaySchedule(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Disco/ClearDaySchedule',
+            disco__pb2.ScheduleRequest.SerializeToString,
+            disco__pb2.ResultResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def QueryPlayers(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/Disco/QueryPlayers',
+            disco__pb2.Empty.SerializeToString,
+            disco__pb2.QueryResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def QueryStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Disco/QueryStatus',
+            disco__pb2.Empty.SerializeToString,
+            disco__pb2.ResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -328,7 +593,7 @@ class Disco(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def DoWhitelistPlayer(request,
+    def DoRegisterMember(request,
             target,
             options=(),
             channel_credentials=None,
@@ -338,14 +603,14 @@ class Disco(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Disco/DoWhitelistPlayer',
-            disco__pb2.WithUserID.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/Disco/DoRegisterMember',
+            disco__pb2.RegisterRequest.SerializeToString,
             disco__pb2.ResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def RecieveEvent(request,
+    def DoRegisterCharacter(request,
             target,
             options=(),
             channel_credentials=None,
@@ -355,42 +620,8 @@ class Disco(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Disco/RecieveEvent',
-            disco__pb2.Event.SerializeToString,
-            disco__pb2.ResultResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def RegisterMember(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Disco/RegisterMember',
-            disco__pb2.RegisterMessage.SerializeToString,
-            disco__pb2.ResultResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def RegisterCharacter(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Disco/RegisterCharacter',
-            disco__pb2.RegisterMessage.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/Disco/DoRegisterCharacter',
+            disco__pb2.RegisterRequest.SerializeToString,
             disco__pb2.ResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

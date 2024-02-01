@@ -3,48 +3,61 @@ syntax = "proto3";
 option go_package = "./proto";
 
 service Disco {
-  rpc OnPlayerJoin (WithUserIDAndTime) returns (Empty) {};
-  rpc OnPlayerLeave (WithUserIDAndTime) returns (Empty) {};
+  rpc OnPlayerJoin (PlayerRequest) returns (Empty) {};
+  rpc OnPlayerLeave (PlayerRequest) returns (Empty) {};
+
   rpc OnServerSave (WithTime) returns (Empty) {};
+  
   rpc OnServerStart (WithTime) returns (Empty) {};
-  rpc OnServerShutdown (WithTime) returns (Empty) {};
+  rpc OnServerStarted (WithTime) returns (Empty) {};
+  rpc OnServerStop (WithTime) returns (Empty) {};
+  rpc OnServerStopped (WithTime) returns (Empty) {};
+
+  rpc OnServerLastOrders (WithTime) returns (Empty) {};
+
+  rpc GetSchedule (Empty) returns (stream ScheduleMessage) {};
+  rpc SetSchedule (ScheduleMessage) returns (ResultResponse) {};
+
+  rpc QueryPlayers (Empty) returns (stream QueryResponse) {};
+
   rpc DoServerStart (WithTime) returns (ResultResponse) {};
   rpc DoServerShutdown (WithTime) returns (ResultResponse) {};
-  rpc DoWhitelistPlayer (WithUserID) returns (ResultResponse) {};
 }
-
-message MyRequest {
-  // Define request fields here
-}
-
-message MyResponse {
-  // Define response fields here
-}
-
 
 enum Result {
     OK = 0;
     ERROR = 1;
 }
 
-message WithUserID {
-    uint64 userid = 1;
+message Empty {
 }
+
+message PlayerRequest {
+  uint64 userid = 1;
+  uint64 timestamp = 2;
+  string name = 3;
+  optional string extra_name = 4;
+  optional string extra_message = 5;
+}
+
 
 message WithTime {
     uint64 timestamp = 1;
-}
-
-message WithUserIDAndTime {
-    uint64 userid = 1;
-    uint64 timestamp = 2;
-}
-
-message Empty {
 }
 
 message ResultResponse {
     Result result = 1;
     optional uint32 code = 2;
     optional string message = 3;
+}
+
+message ScheduleMessage {
+  uint32 iso_weekday = 1;
+  repeated string start_times = 2;
+  repeated string end_times = 3;
+}
+
+message QueryResponse {
+  string name = 1;
+  uint64 playtime = 2;
 }

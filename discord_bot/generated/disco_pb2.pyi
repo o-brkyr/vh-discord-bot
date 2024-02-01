@@ -9,55 +9,32 @@ class Result(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     RESULT_OK: _ClassVar[Result]
     RESULT_ERROR: _ClassVar[Result]
-
-class EventType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
-    __slots__ = ()
-    EVENT_JOIN: _ClassVar[EventType]
-    EVENT_LEAVE: _ClassVar[EventType]
-    EVENT_START: _ClassVar[EventType]
-    EVENT_STARTING: _ClassVar[EventType]
-    EVENT_STARTED: _ClassVar[EventType]
-    EVENT_STOP: _ClassVar[EventType]
-    EVENT_STOPPING: _ClassVar[EventType]
-    EVENT_STOPPED: _ClassVar[EventType]
-    EVENT_SAVING: _ClassVar[EventType]
-    EVENT_SAVED: _ClassVar[EventType]
 RESULT_OK: Result
 RESULT_ERROR: Result
-EVENT_JOIN: EventType
-EVENT_LEAVE: EventType
-EVENT_START: EventType
-EVENT_STARTING: EventType
-EVENT_STARTED: EventType
-EVENT_STOP: EventType
-EVENT_STOPPING: EventType
-EVENT_STOPPED: EventType
-EVENT_SAVING: EventType
-EVENT_SAVED: EventType
 
-class WithUserID(_message.Message):
-    __slots__ = ("userid",)
+class Empty(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class PlayerRequest(_message.Message):
+    __slots__ = ("userid", "timestamp", "name", "extra_name", "extra_message")
     USERID_FIELD_NUMBER: _ClassVar[int]
+    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    EXTRA_NAME_FIELD_NUMBER: _ClassVar[int]
+    EXTRA_MESSAGE_FIELD_NUMBER: _ClassVar[int]
     userid: int
-    def __init__(self, userid: _Optional[int] = ...) -> None: ...
+    timestamp: int
+    name: str
+    extra_name: str
+    extra_message: str
+    def __init__(self, userid: _Optional[int] = ..., timestamp: _Optional[int] = ..., name: _Optional[str] = ..., extra_name: _Optional[str] = ..., extra_message: _Optional[str] = ...) -> None: ...
 
 class WithTime(_message.Message):
     __slots__ = ("timestamp",)
     TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     timestamp: int
     def __init__(self, timestamp: _Optional[int] = ...) -> None: ...
-
-class WithUserIDAndTime(_message.Message):
-    __slots__ = ("userid", "timestamp")
-    USERID_FIELD_NUMBER: _ClassVar[int]
-    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
-    userid: int
-    timestamp: int
-    def __init__(self, userid: _Optional[int] = ..., timestamp: _Optional[int] = ...) -> None: ...
-
-class Empty(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
 
 class ResultResponse(_message.Message):
     __slots__ = ("result", "code", "message")
@@ -69,22 +46,34 @@ class ResultResponse(_message.Message):
     message: str
     def __init__(self, result: _Optional[_Union[Result, str]] = ..., code: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
 
-class Event(_message.Message):
-    __slots__ = ("event", "timestamp", "message")
-    EVENT_FIELD_NUMBER: _ClassVar[int]
-    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
-    MESSAGE_FIELD_NUMBER: _ClassVar[int]
-    event: EventType
-    timestamp: int
-    message: str
-    def __init__(self, event: _Optional[_Union[EventType, str]] = ..., timestamp: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
+class ScheduleMessage(_message.Message):
+    __slots__ = ("weekday", "start_time", "end_time")
+    WEEKDAY_FIELD_NUMBER: _ClassVar[int]
+    START_TIME_FIELD_NUMBER: _ClassVar[int]
+    END_TIME_FIELD_NUMBER: _ClassVar[int]
+    weekday: int
+    start_time: str
+    end_time: str
+    def __init__(self, weekday: _Optional[int] = ..., start_time: _Optional[str] = ..., end_time: _Optional[str] = ...) -> None: ...
 
-class RegisterMessage(_message.Message):
-    __slots__ = ("passed_name", "snowflake", "timestamp")
-    PASSED_NAME_FIELD_NUMBER: _ClassVar[int]
-    SNOWFLAKE_FIELD_NUMBER: _ClassVar[int]
-    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
-    passed_name: str
-    snowflake: int
-    timestamp: int
-    def __init__(self, passed_name: _Optional[str] = ..., snowflake: _Optional[int] = ..., timestamp: _Optional[int] = ...) -> None: ...
+class QueryResponse(_message.Message):
+    __slots__ = ("name", "playtime")
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    PLAYTIME_FIELD_NUMBER: _ClassVar[int]
+    name: str
+    playtime: int
+    def __init__(self, name: _Optional[str] = ..., playtime: _Optional[int] = ...) -> None: ...
+
+class RegisterRequest(_message.Message):
+    __slots__ = ("member_id", "name")
+    MEMBER_ID_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    member_id: int
+    name: str
+    def __init__(self, member_id: _Optional[int] = ..., name: _Optional[str] = ...) -> None: ...
+
+class ScheduleRequest(_message.Message):
+    __slots__ = ("weekday",)
+    WEEKDAY_FIELD_NUMBER: _ClassVar[int]
+    weekday: int
+    def __init__(self, weekday: _Optional[int] = ...) -> None: ...

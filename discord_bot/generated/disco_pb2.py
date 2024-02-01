@@ -14,32 +14,32 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x64isco.proto\"\x1c\n\nWithUserID\x12\x0e\n\x06userid\x18\x01 \x01(\x04\"\x1d\n\x08WithTime\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\"6\n\x11WithUserIDAndTime\x12\x0e\n\x06userid\x18\x01 \x01(\x04\x12\x11\n\ttimestamp\x18\x02 \x01(\x04\"\x07\n\x05\x45mpty\"g\n\x0eResultResponse\x12\x17\n\x06result\x18\x01 \x01(\x0e\x32\x07.Result\x12\x11\n\x04\x63ode\x18\x02 \x01(\rH\x00\x88\x01\x01\x12\x14\n\x07message\x18\x03 \x01(\tH\x01\x88\x01\x01\x42\x07\n\x05_codeB\n\n\x08_message\"W\n\x05\x45vent\x12\x19\n\x05\x65vent\x18\x01 \x01(\x0e\x32\n.EventType\x12\x11\n\ttimestamp\x18\x02 \x01(\x04\x12\x14\n\x07message\x18\x03 \x01(\tH\x00\x88\x01\x01\x42\n\n\x08_message\"L\n\x0fRegisterMessage\x12\x13\n\x0bpassed_name\x18\x01 \x01(\t\x12\x11\n\tsnowflake\x18\x02 \x01(\x04\x12\x11\n\ttimestamp\x18\x03 \x01(\x04*)\n\x06Result\x12\r\n\tRESULT_OK\x10\x00\x12\x10\n\x0cRESULT_ERROR\x10\x01*\xbe\x01\n\tEventType\x12\x0e\n\nEVENT_JOIN\x10\x00\x12\x0f\n\x0b\x45VENT_LEAVE\x10\x01\x12\x0f\n\x0b\x45VENT_START\x10\x02\x12\x12\n\x0e\x45VENT_STARTING\x10\x03\x12\x11\n\rEVENT_STARTED\x10\x04\x12\x0e\n\nEVENT_STOP\x10\x05\x12\x12\n\x0e\x45VENT_STOPPING\x10\x06\x12\x11\n\rEVENT_STOPPED\x10\x07\x12\x10\n\x0c\x45VENT_SAVING\x10\x08\x12\x0f\n\x0b\x45VENT_SAVED\x10\t2\x8a\x04\n\x05\x44isco\x12,\n\x0cOnPlayerJoin\x12\x12.WithUserIDAndTime\x1a\x06.Empty\"\x00\x12-\n\rOnPlayerLeave\x12\x12.WithUserIDAndTime\x1a\x06.Empty\"\x00\x12#\n\x0cOnServerSave\x12\t.WithTime\x1a\x06.Empty\"\x00\x12$\n\rOnServerStart\x12\t.WithTime\x1a\x06.Empty\"\x00\x12\'\n\x10OnServerShutdown\x12\t.WithTime\x1a\x06.Empty\"\x00\x12-\n\rDoServerStart\x12\t.WithTime\x1a\x0f.ResultResponse\"\x00\x12\x30\n\x10\x44oServerShutdown\x12\t.WithTime\x1a\x0f.ResultResponse\"\x00\x12\x33\n\x11\x44oWhitelistPlayer\x12\x0b.WithUserID\x1a\x0f.ResultResponse\"\x00\x12)\n\x0cRecieveEvent\x12\x06.Event\x1a\x0f.ResultResponse\"\x00\x12\x35\n\x0eRegisterMember\x12\x10.RegisterMessage\x1a\x0f.ResultResponse\"\x00\x12\x38\n\x11RegisterCharacter\x12\x10.RegisterMessage\x1a\x0f.ResultResponse\"\x00\x42\tZ\x07./protob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x64isco.proto\"\x07\n\x05\x45mpty\"\x96\x01\n\rPlayerRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x04\x12\x11\n\ttimestamp\x18\x02 \x01(\x04\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x17\n\nextra_name\x18\x04 \x01(\tH\x00\x88\x01\x01\x12\x1a\n\rextra_message\x18\x05 \x01(\tH\x01\x88\x01\x01\x42\r\n\x0b_extra_nameB\x10\n\x0e_extra_message\"\x1d\n\x08WithTime\x12\x11\n\ttimestamp\x18\x01 \x01(\x04\"g\n\x0eResultResponse\x12\x17\n\x06result\x18\x01 \x01(\x0e\x32\x07.Result\x12\x11\n\x04\x63ode\x18\x02 \x01(\rH\x00\x88\x01\x01\x12\x14\n\x07message\x18\x03 \x01(\tH\x01\x88\x01\x01\x42\x07\n\x05_codeB\n\n\x08_message\"H\n\x0fScheduleMessage\x12\x0f\n\x07weekday\x18\x01 \x01(\r\x12\x12\n\nstart_time\x18\x02 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x03 \x01(\t\"/\n\rQueryResponse\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08playtime\x18\x02 \x01(\x04\"2\n\x0fRegisterRequest\x12\x11\n\tmember_id\x18\x01 \x01(\x04\x12\x0c\n\x04name\x18\x02 \x01(\t\"\"\n\x0fScheduleRequest\x12\x0f\n\x07weekday\x18\x01 \x01(\r*)\n\x06Result\x12\r\n\tRESULT_OK\x10\x00\x12\x10\n\x0cRESULT_ERROR\x10\x01\x32\xce\x06\n\x05\x44isco\x12(\n\x0cOnPlayerJoin\x12\x0e.PlayerRequest\x1a\x06.Empty\"\x00\x12)\n\rOnPlayerLeave\x12\x0e.PlayerRequest\x1a\x06.Empty\"\x00\x12#\n\x0cOnServerSave\x12\t.WithTime\x1a\x06.Empty\"\x00\x12$\n\rOnServerStart\x12\t.WithTime\x1a\x06.Empty\"\x00\x12&\n\x0fOnServerStarted\x12\t.WithTime\x1a\x06.Empty\"\x00\x12#\n\x0cOnServerStop\x12\t.WithTime\x1a\x06.Empty\"\x00\x12&\n\x0fOnServerStopped\x12\t.WithTime\x1a\x06.Empty\"\x00\x12)\n\x12OnServerLastOrders\x12\t.WithTime\x1a\x06.Empty\"\x00\x12\x38\n\x0eGetDaySchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage\"\x00\x30\x01\x12/\n\x0fGetWeekSchedule\x12\x06.Empty\x1a\x10.ScheduleMessage\"\x00\x30\x01\x12\x35\n\x0eSetDaySchedule\x12\x10.ScheduleMessage\x1a\x0f.ResultResponse\"\x00\x12\x37\n\x10\x43learDaySchedule\x12\x10.ScheduleRequest\x1a\x0f.ResultResponse\"\x00\x12*\n\x0cQueryPlayers\x12\x06.Empty\x1a\x0e.QueryResponse\"\x00\x30\x01\x12(\n\x0bQueryStatus\x12\x06.Empty\x1a\x0f.ResultResponse\"\x00\x12-\n\rDoServerStart\x12\t.WithTime\x1a\x0f.ResultResponse\"\x00\x12\x30\n\x10\x44oServerShutdown\x12\t.WithTime\x1a\x0f.ResultResponse\"\x00\x12\x37\n\x10\x44oRegisterMember\x12\x10.RegisterRequest\x1a\x0f.ResultResponse\"\x00\x12:\n\x13\x44oRegisterCharacter\x12\x10.RegisterRequest\x1a\x0f.ResultResponse\"\x00\x42\x06Z\x04./pbb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'disco_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z\007./proto'
-  _globals['_RESULT']._serialized_start=413
-  _globals['_RESULT']._serialized_end=454
-  _globals['_EVENTTYPE']._serialized_start=457
-  _globals['_EVENTTYPE']._serialized_end=647
-  _globals['_WITHUSERID']._serialized_start=15
-  _globals['_WITHUSERID']._serialized_end=43
-  _globals['_WITHTIME']._serialized_start=45
-  _globals['_WITHTIME']._serialized_end=74
-  _globals['_WITHUSERIDANDTIME']._serialized_start=76
-  _globals['_WITHUSERIDANDTIME']._serialized_end=130
-  _globals['_EMPTY']._serialized_start=132
-  _globals['_EMPTY']._serialized_end=139
-  _globals['_RESULTRESPONSE']._serialized_start=141
-  _globals['_RESULTRESPONSE']._serialized_end=244
-  _globals['_EVENT']._serialized_start=246
-  _globals['_EVENT']._serialized_end=333
-  _globals['_REGISTERMESSAGE']._serialized_start=335
-  _globals['_REGISTERMESSAGE']._serialized_end=411
-  _globals['_DISCO']._serialized_start=650
-  _globals['_DISCO']._serialized_end=1172
+  _globals['DESCRIPTOR']._serialized_options = b'Z\004./pb'
+  _globals['_RESULT']._serialized_start=524
+  _globals['_RESULT']._serialized_end=565
+  _globals['_EMPTY']._serialized_start=15
+  _globals['_EMPTY']._serialized_end=22
+  _globals['_PLAYERREQUEST']._serialized_start=25
+  _globals['_PLAYERREQUEST']._serialized_end=175
+  _globals['_WITHTIME']._serialized_start=177
+  _globals['_WITHTIME']._serialized_end=206
+  _globals['_RESULTRESPONSE']._serialized_start=208
+  _globals['_RESULTRESPONSE']._serialized_end=311
+  _globals['_SCHEDULEMESSAGE']._serialized_start=313
+  _globals['_SCHEDULEMESSAGE']._serialized_end=385
+  _globals['_QUERYRESPONSE']._serialized_start=387
+  _globals['_QUERYRESPONSE']._serialized_end=434
+  _globals['_REGISTERREQUEST']._serialized_start=436
+  _globals['_REGISTERREQUEST']._serialized_end=486
+  _globals['_SCHEDULEREQUEST']._serialized_start=488
+  _globals['_SCHEDULEREQUEST']._serialized_end=522
+  _globals['_DISCO']._serialized_start=568
+  _globals['_DISCO']._serialized_end=1414
 # @@protoc_insertion_point(module_scope)
