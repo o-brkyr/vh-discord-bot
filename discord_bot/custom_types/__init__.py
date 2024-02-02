@@ -14,3 +14,10 @@ class Message(NamedTuple):
     uid: int
     name: Optional[str]
     time: Optional[int]
+
+
+class Status(Enum):
+    OFFLINE = auto
+    ONLINE = auto
+    STARTING = auto
+    STOPPING = auto
