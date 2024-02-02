@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING
 
 from discord.ext import commands
-from extensions.utils import WithBotMixin
+from discord_bot.extensions.cog_utils import WithBotMixin
+
+import logging
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context
 
-COG_NAME = "ExtensionReloader"
-
-import logging
 
 log = logging.getLogger(__name__)
+
+COG_NAME = "ExtensionReloader"
 
 
 async def setup(bot: commands.Bot):
@@ -20,7 +21,7 @@ async def setup(bot: commands.Bot):
 
 class ExtensionReloader(WithBotMixin, commands.Cog, name=COG_NAME):
     def cog_load(self):
-        print(f"Loaded <{COG_NAME}>")
+        log.info("Loaded cog")
 
     @commands.hybrid_command()
     async def reload_cog(self, ctx: "Context", name: str):

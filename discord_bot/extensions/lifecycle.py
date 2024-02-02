@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 import grpc
 from discord.ext import commands
-from extensions.utils import WithBotMixin
+from discord_bot.extensions.cog_utils import WithBotMixin
 from generated import disco_pb2_grpc
 from generated.disco_pb2 import WithTime
 from settings import SETTINGS
@@ -26,10 +26,10 @@ async def setup(bot: commands.Bot):
 
 class ServerLifecycleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
     def cog_load(self):
-        log.info("Loaded Lifecycle Cog")
+        log.info("Loaded cog")
 
     @commands.hybrid_command()
-    async def force_start_server(self, ctx: "Context"):
+    async def force_start_servster(self, ctx: "Context"):
         """
         Forces the server to start
         """

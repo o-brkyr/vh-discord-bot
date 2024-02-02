@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 
 from discord.ext import commands
-from extensions.utils import WithBotMixin
+from discord_bot.extensions.cog_utils import WithBotMixin
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context
 
 
-COG_NAME = "SyncFunc"
-
 import logging
+
+COG_NAME = "SyncFunc"
 
 log = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ async def setup(bot: commands.Bot):
 
 class SyncFunc(WithBotMixin, commands.Cog, name=COG_NAME):
     def cog_load(self):
-        print("Loaded Sync Cog")
+        log.info("Loaded cog")
 
     @commands.hybrid_command()
     async def force_sync(self, ctx: "Context"):
