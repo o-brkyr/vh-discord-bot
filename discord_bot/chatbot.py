@@ -1,6 +1,3 @@
-import threading
-from concurrent import futures
-
 import asyncio
 import discord
 import grpc
@@ -8,7 +5,6 @@ from discord.ext import commands
 from discoserver import DiscoServer
 from generated import disco_pb2_grpc
 from settings import SETTINGS
-from custom_types import Action, Message
 
 import logging
 
@@ -36,6 +32,9 @@ async def setup_bot(x: commands.Bot):
     await x.load_extension("extensions.reloader")
     await x.load_extension("extensions.sync")
     await x.load_extension("extensions.lifecycle")
+    await x.load_extension("extensions.registrar")
+    await x.load_extension("extensions.channel")
+    await x.load_extension("extensions.schedule")
 
 
 async def serve_grpc():
@@ -47,7 +46,6 @@ async def serve_grpc():
 
 
 async def startup():
-    log.info("Starting async shit")
     discord.utils.setup_logging()
     async with asyncio.TaskGroup() as tg:
         chatbot_task = tg.create_task(chat_bot.start(token=SETTINGS.bot_token))
@@ -66,3 +64,5 @@ async def startup():
 
 if __name__ == "__main__":
     asyncio.run(startup())
+
+
