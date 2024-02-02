@@ -1,20 +1,33 @@
 syntax = "proto3";
 
-option go_package = "./proto";
+option go_package = "./pb";
 
 service Disco {
-  rpc OnPlayerJoin (WithUserIDAndTime) returns (Empty) {};
-  rpc OnPlayerLeave (WithUserIDAndTime) returns (Empty) {};
+  rpc OnPlayerJoin (PlayerRequest) returns (Empty) {};
+  rpc OnPlayerLeave (PlayerRequest) returns (Empty) {};
+
   rpc OnServerSave (WithTime) returns (Empty) {};
+  
   rpc OnServerStart (WithTime) returns (Empty) {};
-  rpc OnServerShutdown (WithTime) returns (Empty) {};
+  rpc OnServerStarted (WithTime) returns (Empty) {};
+  rpc OnServerStop (WithTime) returns (Empty) {};
+  rpc OnServerStopped (WithTime) returns (Empty) {};
+
+  rpc OnServerLastOrders (WithTime) returns (Empty) {};
+
+  rpc GetDaySchedule (ScheduleRequest) returns (stream ScheduleMessage) {};
+  rpc GetWeekSchedule (Empty) returns (stream ScheduleMessage) {};
+  rpc SetDaySchedule (ScheduleMessage) returns (ResultResponse) {};
+  rpc ClearDaySchedule (ScheduleRequest) returns (ResultResponse) {};
+
+  rpc QueryPlayers (Empty) returns (stream QueryResponse) {};
+  rpc QueryStatus (Empty) returns (ResultResponse) {};
+
   rpc DoServerStart (WithTime) returns (ResultResponse) {};
   rpc DoServerShutdown (WithTime) returns (ResultResponse) {};
-  rpc DoWhitelistPlayer (WithUserID) returns (ResultResponse) {};
-  rpc RecieveEvent (Event) returns (ResultResponse) {};
 
-  rpc RegisterMember (RegisterMessage) returns (ResultResponse) {};
-  rpc RegisterCharacter (RegisterMessage) returns (ResultResponse) {};
+  rpc DoRegisterMember (RegisterRequest) returns (ResultResponse) {};
+  rpc DoRegisterCharacter (RegisterRequest) returns (ResultResponse) {};
 }
 
 enum Result {
@@ -22,34 +35,19 @@ enum Result {
     RESULT_ERROR = 1;
 }
 
-
-enum EventType {
-    EVENT_JOIN = 0;
-    EVENT_LEAVE = 1;
-    EVENT_START = 2;
-    EVENT_STARTING = 3;
-    EVENT_STARTED = 4;
-    EVENT_STOP = 5;
-    EVENT_STOPPING = 6;
-    EVENT_STOPPED = 7;
-    EVENT_SAVING = 8;
-    EVENT_SAVED = 9;
+message Empty {
 }
 
-message WithUserID {
-    uint64 userid = 1;
+message PlayerRequest {
+  uint64 userid = 1;
+  uint64 timestamp = 2;
+  string name = 3;
+  optional string extra_name = 4;
+  optional string extra_message = 5;
 }
 
 message WithTime {
     uint64 timestamp = 1;
-}
-
-message WithUserIDAndTime {
-    uint64 userid = 1;
-    uint64 timestamp = 2;
-}
-
-message Empty {
 }
 
 message ResultResponse {
@@ -58,14 +56,22 @@ message ResultResponse {
     optional string message = 3;
 }
 
-message Event {
-    EventType event = 1;
-    uint64 timestamp = 2;
-    optional string message =3;
+message ScheduleMessage {
+  uint32 weekday = 1;
+  string start_time = 2;
+  string end_time = 3;
 }
 
-message RegisterMessage {
-    string passed_name = 1;
-    uint64 snowflake = 2;
-    uint64 timestamp = 3;
+message QueryResponse {
+  string name = 1;
+  uint64 playtime = 2;
+}
+
+message RegisterRequest {
+  uint64 member_id = 1;
+  string name = 2;
+}
+
+message ScheduleRequest {
+  uint32 weekday = 1;
 }
