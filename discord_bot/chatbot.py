@@ -1,12 +1,12 @@
 import asyncio
+import logging
+
 import discord
 import grpc
 from discord.ext import commands
 from discoserver import DiscoServer
 from generated import disco_pb2_grpc
 from settings import SETTINGS
-
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -64,5 +64,3 @@ async def startup():
 
 if __name__ == "__main__":
     asyncio.run(startup())
-
-

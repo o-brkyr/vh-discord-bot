@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import grpc
 from discord.ext import commands
 from generated import disco_pb2_grpc
-from generated.disco_pb2 import RegisterRequest, ResultResponse, Result
+from generated.disco_pb2 import RegisterRequest, Result, ResultResponse
 from settings import SETTINGS
 
 from discord_bot.extensions.cog_utils import WithBotMixin

@@ -1,13 +1,12 @@
-from typing import TYPE_CHECKING
-from generated import disco_pb2_grpc
-from settings import SETTINGS
-from datetime import datetime
-
-from generated.disco_pb2 import Empty
-from custom_types import Status
 import logging
-from utils import guild_utils, embeds
+from datetime import datetime
+from typing import TYPE_CHECKING
 
+from custom_types import Status
+from generated import disco_pb2_grpc
+from generated.disco_pb2 import Empty
+from settings import SETTINGS
+from utils import embeds, guild_utils
 
 if TYPE_CHECKING:
     from discord.ext.commands import Bot

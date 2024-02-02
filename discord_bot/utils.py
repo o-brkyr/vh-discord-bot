@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 
-from discord import Role, Guild, Colour, TextChannel
-from discord import utils as discord_utils
-from constants import ROLE_NAME, CHANNEL_TITLE, STATUS_TO_SYMBOL_MAP
-
+from constants import CHANNEL_TITLE, ROLE_NAME, STATUS_TO_SYMBOL_MAP
 from custom_types import Status
+from discord import Colour, Guild, Role, TextChannel
+from discord import utils as discord_utils
 
 
 def build_channel_title(status: Status) -> str:

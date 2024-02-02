@@ -1,10 +1,10 @@
 from datetime import time
-from typing import TYPE_CHECKING, Literal, List, Tuple
+from typing import TYPE_CHECKING, List, Literal, Tuple
 
 import grpc
 from discord.ext import commands
 from generated import disco_pb2_grpc
-from generated.disco_pb2 import ScheduleRequest, ScheduleMessage
+from generated.disco_pb2 import ScheduleMessage, ScheduleRequest
 from settings import SETTINGS
 from utils import embeds
 
@@ -54,17 +54,22 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
                 stub = disco_pb2_grpc.DiscoStub(channel)
-                session_times: List[Tuple[time,time]] = []
+                session_times: List[Tuple[time, time]] = []
                 for resp in stub.GetDaySchedule(
                     ScheduleRequest(weekday=weekday_as_int)
                 ):
                     resp: ScheduleMessage
-                    session_times.append((time.fromisoformat(resp.start_time),time.fromisoformat(resp.end_time)))
+                    session_times.append(
+                        (
+                            time.fromisoformat(resp.start_time),
+                            time.fromisoformat(resp.end_time),
+                        )
+                    )
         except grpc.RpcError as rpc_error:
             await ctx.send(f"Failed to start server: {rpc_error}")
             return
 
-        embed = embeds.day_schedule(weekday,session_times)
+        embed = embeds.day_schedule(weekday, session_times)
         await ctx.send(embed=embed)
 
     @commands.hybrid_command()
@@ -75,7 +80,7 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         ],
         start_time: str,
-        end_time: str
+        end_time: str,
     ):
         weekday_as_int = WEEKDAY_AS_INT_MAP.get(weekday, 0)
 
@@ -85,15 +90,18 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
         try:
             start_time_time = time.fromisoformat(start_time)
         except ValueError:
-            await ctx.send(f"Invalid start time: {start_time}. Try the following format: '16:30'")
+            await ctx.send(
+                f"Invalid start time: {start_time}. Try the following format: '16:30'"
+            )
             return
-        
+
         try:
             end_time_time = time.fromisoformat(end_time)
         except ValueError:
-            await ctx.send(f"Invalid end time: {end_time}. Try the following format: '16:30'")
+            await ctx.send(
+                f"Invalid end time: {end_time}. Try the following format: '16:30'"
+            )
             return
-
 
         try:
             with grpc.insecure_channel(
@@ -102,14 +110,12 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
                 stub = disco_pb2_grpc.DiscoStub(channel)
                 response: ScheduleMessage = stub.SetDaySchedule(
                     ScheduleMessage(
-                        weekday=weekday_as_int,
-                        start_time=start_time,
-                        end_time=end_time
+                        weekday=weekday_as_int, start_time=start_time, end_time=end_time
                     )
                 )
         except grpc.RpcError as rpc_error:
             await ctx.send(f"Failed to start server: {rpc_error}")
             return
 
-        embed = embeds.day_schedule(weekday,[(start_time_time,end_time_time)])
+        embed = embeds.day_schedule(weekday, [(start_time_time, end_time_time)])
         await ctx.send(embed=embed)

@@ -1,6 +1,5 @@
 from custom_types import Status
 
-
 CHANNEL_TITLE = "𝖛𝖆𝖑𝖍𝖊𝖎𝖒"
 
 STATUS_ONLINE = "🟢"

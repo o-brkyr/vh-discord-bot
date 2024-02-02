@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING
 
 import grpc
 from discord.ext import commands
-from discord_bot.extensions.cog_utils import WithBotMixin
 from generated import disco_pb2_grpc
 from generated.disco_pb2 import WithTime
 from settings import SETTINGS
+
+from discord_bot.extensions.cog_utils import WithBotMixin
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context

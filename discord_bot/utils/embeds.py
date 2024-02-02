@@ -1,8 +1,8 @@
-from discord import Embed, Colour
-from datetime import date, time
 import calendar
-
+from datetime import date, time
 from typing import Iterable, Tuple
+
+from discord import Colour, Embed
 
 
 def player_join(name: str) -> Embed:
@@ -45,7 +45,8 @@ def shutdown() -> Embed:
     )
     return embed
 
-def day_schedule(weekday: str,sessions: Iterable[Tuple[time,time]]) -> Embed:
+
+def day_schedule(weekday: str, sessions: Iterable[Tuple[time, time]]) -> Embed:
     embed = Embed(
         title=f"Schedule for {weekday}",
         colour=Colour.blue(),
@@ -54,13 +55,13 @@ def day_schedule(weekday: str,sessions: Iterable[Tuple[time,time]]) -> Embed:
     if len(sessions) == 0:
         embed.description = "There are no sessions scheduled for this day."
         return embed
-    
+
     for n, time_pair in enumerate(sessions):
         start_time, end_time = time_pair
         start_time: time
         end_time: time
         embed.add_field(
-            name=f'Session {n+1}',
-            value=f'From {start_time.strftime('%H:%M:%S')} to {end_time.strftime('%H:%M:%S')}'
+            name=f"Session {n+1}",
+            value=f'From {start_time.strftime('%H:%M:%S')} to {end_time.strftime('%H:%M:%S')}',
         )
     return embed

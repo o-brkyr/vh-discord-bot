@@ -1,9 +1,9 @@
+import logging
 from typing import TYPE_CHECKING
 
 from discord.ext import commands
-from discord_bot.extensions.cog_utils import WithBotMixin
 
-import logging
+from discord_bot.extensions.cog_utils import WithBotMixin
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context
