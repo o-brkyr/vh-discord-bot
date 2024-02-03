@@ -16,15 +16,15 @@ import logging
 
 log = logging.getLogger(__name__)
 
-COG_NAME = "Register cog"
+COG_NAME = "RegistrationCog"
 
 
 async def setup(bot: commands.Bot):
     await bot.remove_cog(COG_NAME)
-    await bot.add_cog(RegistrationCommands(bot))
+    await bot.add_cog(RegistrationCog(bot))
 
 
-class RegistrationCommands(WithBotMixin, commands.Cog, name=COG_NAME):
+class RegistrationCog(WithBotMixin, commands.Cog, name=COG_NAME):
     def cog_load(self):
         log.info("Loaded cog")
 

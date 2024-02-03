@@ -30,13 +30,10 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
         log.info("Loaded cog")
 
     @commands.hybrid_command()
-    async def force_start_servster(self, ctx: "Context"):
+    async def force_start(self, ctx: "Context"):
         """
         Forces the server to start
         """
-        # if not is_admin(ctx):
-        #     await ctx.send("You don't have permission to do that.")
-        #     return
 
         try:
             with grpc.insecure_channel(
@@ -50,17 +47,18 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
             await ctx.send(f"Failed to start server: {rpc_error}")
             return
 
-        await ctx.send(f"Recieved start response: {response.code}")
+        if response.code != 200:
+            await ctx.send(
+                f"Error recieved - code {response.code}, message: '{response.message}'"
+            )
+        else:
+            await ctx.send("👍 got it fam", ephemeral=True)
 
     @commands.hybrid_command()
-    async def force_shutdown_server(self, ctx: "Context"):
+    async def force_stop(self, ctx: "Context"):
         """
         Forces the server to shutdown
         """
-        # if not is_admin(ctx):
-        #     await ctx.send("You don't have permission to do that.")
-        #     return
-
         try:
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
@@ -73,4 +71,9 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
             await ctx.send(f"Failed to shutdown server: {rpc_error}")
             return
 
-        await ctx.send(f"Recieved shutdown response: {response.code}")
+        if response.code != 200:
+            await ctx.send(
+                f"Error recieved - code {response.code}, message: '{response.message}'"
+            )
+        else:
+            await ctx.send("👍 got it fam", ephemeral=True)

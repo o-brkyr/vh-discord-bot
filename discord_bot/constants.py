@@ -13,6 +13,17 @@ ROLE_NAME = "𝔳𝔞𝔩𝔥𝔢𝔦𝔪𝔢𝔯"
 STATUS_TO_SYMBOL_MAP: dict[Status, str] = {
     Status.OFFLINE: STATUS_OFFLINE,
     Status.ONLINE: STATUS_ONLINE,
-    Status.STARTING: f"{STATUS_OFFLINE} -> {STATUS_ONLINE}",
-    Status.STOPPING: f"{STATUS_ONLINE} -> {STATUS_OFFLINE}",
+    Status.STARTING: STATUS_INBETWEEN,
+    Status.STOPPING: STATUS_INBETWEEN,
+}
+
+
+WEEKDAY_AS_INT_MAP: dict[str, int] = {
+    "Monday": 0,
+    "Tuesday": 1,
+    "Wednesday": 2,
+    "Thursday": 3,
+    "Friday": 4,
+    "Saturday": 5,
+    "Sunday": 6,
 }

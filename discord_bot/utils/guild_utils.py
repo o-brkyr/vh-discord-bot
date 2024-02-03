@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from constants import CHANNEL_TITLE, ROLE_NAME, STATUS_TO_SYMBOL_MAP
 from custom_types import Status
-from discord import Colour, Embed
+from discord import Colour
 from discord import utils as discord_utils
 
 if TYPE_CHECKING:
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 def build_channel_title(status: Status) -> str:
-    return f"{CHANNEL_TITLE} - {STATUS_TO_SYMBOL_MAP.get(status)}"
+    return f"{STATUS_TO_SYMBOL_MAP.get(status)}{CHANNEL_TITLE}"
 
 
 async def get_or_create_valheimer_channel(guild: "Guild") -> "TextChannel":
@@ -40,4 +40,6 @@ async def get_or_create_valheimer_role(guild: "Guild") -> "Role":
 
 async def update_channel_title_with_status(guild: "Guild", status: Status) -> None:
     channel = await get_or_create_valheimer_channel(guild)
-    await channel.edit(name=build_channel_title(status))
+    name = build_channel_title(status)
+    print(f"New channel name = {name}")
+    await channel.edit(name=name)

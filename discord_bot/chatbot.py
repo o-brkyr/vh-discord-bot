@@ -10,7 +10,6 @@ from settings import SETTINGS
 
 log = logging.getLogger(__name__)
 
-
 intents = discord.Intents.default()
 
 intents.message_content = True
@@ -18,23 +17,14 @@ intents.members = True
 
 chat_bot = commands.Bot(command_prefix="$", intents=intents)
 
-
-queue = asyncio.Queue()
+extensions = ["reloader", "sync", "lifecycle", "registrar", "channel", "schedule"]
 
 
 @chat_bot.event
 async def on_ready():
     log.info("Logged in")
-    await setup_bot(chat_bot)
-
-
-async def setup_bot(x: commands.Bot):
-    await x.load_extension("extensions.reloader")
-    await x.load_extension("extensions.sync")
-    await x.load_extension("extensions.lifecycle")
-    await x.load_extension("extensions.registrar")
-    await x.load_extension("extensions.channel")
-    await x.load_extension("extensions.schedule")
+    for ext in extensions:
+        await chat_bot.load_extension(f"extensions.{ext}")
 
 
 async def serve_grpc():

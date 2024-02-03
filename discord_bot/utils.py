@@ -7,7 +7,7 @@ from discord import utils as discord_utils
 
 
 def build_channel_title(status: Status) -> str:
-    return f"{CHANNEL_TITLE} - {STATUS_TO_SYMBOL_MAP.get(status)}"
+    return f"{STATUS_TO_SYMBOL_MAP.get(status)}{CHANNEL_TITLE}"
 
 
 async def get_or_create_valheimer_channel(guild: Guild) -> TextChannel:

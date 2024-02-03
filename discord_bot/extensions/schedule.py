@@ -6,7 +6,7 @@ from discord.ext import commands
 from generated import disco_pb2_grpc
 from generated.disco_pb2 import ScheduleMessage, ScheduleRequest
 from settings import SETTINGS
-from utils import embeds
+from utils import embeds, time_utils
 
 from discord_bot.extensions.cog_utils import WithBotMixin
 
@@ -22,7 +22,7 @@ COG_NAME = "Schedule cog"
 
 async def setup(bot: commands.Bot):
     await bot.remove_cog(COG_NAME)
-    await bot.add_cog(ScheduleCommands(bot))
+    await bot.add_cog(ScheduleCog(bot))
 
 
 WEEKDAY_AS_INT_MAP: dict[str, int] = {
@@ -35,8 +35,44 @@ WEEKDAY_AS_INT_MAP: dict[str, int] = {
     "Sunday": 6,
 }
 
+START_LITERALS = Literal[
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+]
 
-class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
+END_LITERALS = Literal[
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:59",
+]
+
+
+class ScheduleCog(WithBotMixin, commands.Cog, name=COG_NAME):
     def cog_load(self):
         log.info("Loaded cog")
 
@@ -48,7 +84,11 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         ],
     ):
+        """
+        Returns the schedule for a day.
+        """
         weekday_as_int = WEEKDAY_AS_INT_MAP.get(weekday, 0)
+        go_weekday_as_int = time_utils.weekday_from_python_to_go(weekday_as_int)
         try:
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
@@ -56,7 +96,7 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
                 stub = disco_pb2_grpc.DiscoStub(channel)
                 session_times: List[Tuple[time, time]] = []
                 for resp in stub.GetDaySchedule(
-                    ScheduleRequest(weekday=weekday_as_int)
+                    ScheduleRequest(weekday=go_weekday_as_int)
                 ):
                     resp: ScheduleMessage
                     session_times.append(
@@ -69,20 +109,27 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
             await ctx.send(f"Failed to start server: {rpc_error}")
             return
 
+        session_times = sorted(session_times, key=lambda x: x[0])
+
         embed = embeds.day_schedule(weekday, session_times)
         await ctx.send(embed=embed)
 
     @commands.hybrid_command()
-    async def set_schedule_for_day(
+    async def add_schedule_to_day(
         self,
         ctx: "Context",
         weekday: Literal[
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         ],
-        start_time: str,
-        end_time: str,
+        start_time: START_LITERALS,
+        end_time: END_LITERALS,
     ):
+        """
+        Add a session to a day. Time must be in the format "HH:MM"
+        """
         weekday_as_int = WEEKDAY_AS_INT_MAP.get(weekday, 0)
+
+        go_weekday_as_int = time_utils.weekday_from_python_to_go(weekday_as_int)
 
         start_time = start_time.strip()
         end_time = end_time.strip()
@@ -103,14 +150,22 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
             )
             return
 
+        if end_time_time < start_time_time:
+            await ctx.send(
+                f"Invalid selection: End time '{end_time}' cannot be before start time '{start_time}'"
+            )
+            return
+
         try:
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
                 stub = disco_pb2_grpc.DiscoStub(channel)
-                response: ScheduleMessage = stub.SetDaySchedule(
+                stub.SetDaySchedule(
                     ScheduleMessage(
-                        weekday=weekday_as_int, start_time=start_time, end_time=end_time
+                        weekday=go_weekday_as_int,
+                        start_time=start_time,
+                        end_time=end_time,
                     )
                 )
         except grpc.RpcError as rpc_error:
@@ -119,3 +174,29 @@ class ScheduleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
 
         embed = embeds.day_schedule(weekday, [(start_time_time, end_time_time)])
         await ctx.send(embed=embed)
+
+    @commands.hybrid_command()
+    async def clear_schedule_on_day(
+        self,
+        ctx: "Context",
+        weekday: Literal[
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ],
+    ):
+        """
+        Remove the schedule for a given day.
+        """
+        weekday_as_int = WEEKDAY_AS_INT_MAP.get(weekday, 0)
+        go_weekday_as_int = time_utils.weekday_from_python_to_go(weekday_as_int)
+
+        try:
+            with grpc.insecure_channel(
+                f"localhost:{SETTINGS.python_to_go_port}"
+            ) as channel:
+                stub = disco_pb2_grpc.DiscoStub(channel)
+                stub.ClearDaySchedule(ScheduleRequest(weekday=go_weekday_as_int))
+        except grpc.RpcError as rpc_error:
+            await ctx.send(f"Failed to start server: {rpc_error}")
+            return
+
+        await ctx.send(f"Cleared schedule for {weekday}")

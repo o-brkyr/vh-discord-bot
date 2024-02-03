@@ -25,6 +25,7 @@ class ExtensionReloader(WithBotMixin, commands.Cog, name=COG_NAME):
 
     @commands.hybrid_command()
     async def reload_cog(self, ctx: "Context", name: str):
-        await ctx.send(f"Reloading extension '{name}'")
-        await self.bot.reload_extension(name)
-        await ctx.send(f"Reloaded extension '{name}'.")
+        processed_name = f"extensions.{name}"
+        await ctx.send(f"Reloading extension '{processed_name}'")
+        await self.bot.reload_extension(processed_name)
+        await ctx.send(f"Reloaded extension '{processed_name}'.")

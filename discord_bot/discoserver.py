@@ -47,25 +47,52 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
 
         return Empty()
 
-    async def OnServerShutdown(self, request: "WithTime", context) -> Empty:
-        log.info("Recived 'OnServerShutdown' RPC call")
+    async def OnServerStopped(self, request: "WithTime", context) -> Empty:
+        log.info("Recived 'OnServerStopped' RPC call")
         await guild_utils.update_channel_title_with_status(
             self.bot.get_guild(SETTINGS.target_guild), status=Status.STOPPING
         )
-        await guild_utils.get_or_create_valheimer_channel(SETTINGS.target_guild).send(
-            embed=embeds.shutdown()
+        channel = await guild_utils.get_or_create_valheimer_channel(
+            self.bot.get_guild(SETTINGS.target_guild)
         )
+        await channel.send(embed=embeds.stopped())
         return Empty()
 
     async def OnServerStart(self, request: "WithTime", context) -> Empty:
         log.info("Recived 'OnServerStart' RPC call")
+        self.status = Status.STARTING
+
+        await guild_utils.update_channel_title_with_status(
+            self.bot.get_guild(SETTINGS.target_guild), status=Status.STARTING
+        )
+        channel = await guild_utils.get_or_create_valheimer_channel(
+            self.bot.get_guild(SETTINGS.target_guild)
+        )
+        await channel.send(embed=embeds.starting())
+
+        return Empty()
+
+    async def OnServerStarted(self, request: "WithTime", context) -> Empty:
+        log.info("Recieved 'OnServerStarted' RPC call")
         self.status = Status.ONLINE
 
         await guild_utils.update_channel_title_with_status(
             self.bot.get_guild(SETTINGS.target_guild), status=Status.ONLINE
         )
-        await guild_utils.get_or_create_valheimer_channel(SETTINGS.target_guild).send(
-            embed=embeds.start()
+        channel = await guild_utils.get_or_create_valheimer_channel(
+            self.bot.get_guild(SETTINGS.target_guild),
         )
+        await channel.send(embed=embeds.start())
 
+        return Empty()
+
+    async def OnServerStop(self, request: "WithTime", context) -> Empty:
+        log.info("Recived 'OnServerStop' RPC call")
+        await guild_utils.update_channel_title_with_status(
+            self.bot.get_guild(SETTINGS.target_guild), status=Status.OFFLINE
+        )
+        channel = await guild_utils.get_or_create_valheimer_channel(
+            self.bot.get_guild(SETTINGS.target_guild)
+        )
+        await channel.send(embed=embeds.stopping())
         return Empty()
