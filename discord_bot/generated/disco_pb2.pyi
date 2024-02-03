@@ -1,10 +1,7 @@
-from typing import ClassVar as _ClassVar
-from typing import Optional as _Optional
-from typing import Union as _Union
-
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -12,7 +9,6 @@ class Result(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     RESULT_OK: _ClassVar[Result]
     RESULT_ERROR: _ClassVar[Result]
-
 RESULT_OK: Result
 RESULT_ERROR: Result
 
@@ -21,25 +17,16 @@ class Empty(_message.Message):
     def __init__(self) -> None: ...
 
 class PlayerRequest(_message.Message):
-    __slots__ = ("userid", "timestamp", "name", "extra_name", "extra_message")
-    USERID_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("timestamp", "name", "extra_name", "extra_message")
     TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     EXTRA_NAME_FIELD_NUMBER: _ClassVar[int]
     EXTRA_MESSAGE_FIELD_NUMBER: _ClassVar[int]
-    userid: int
     timestamp: int
     name: str
     extra_name: str
     extra_message: str
-    def __init__(
-        self,
-        userid: _Optional[int] = ...,
-        timestamp: _Optional[int] = ...,
-        name: _Optional[str] = ...,
-        extra_name: _Optional[str] = ...,
-        extra_message: _Optional[str] = ...,
-    ) -> None: ...
+    def __init__(self, timestamp: _Optional[int] = ..., name: _Optional[str] = ..., extra_name: _Optional[str] = ..., extra_message: _Optional[str] = ...) -> None: ...
 
 class WithTime(_message.Message):
     __slots__ = ("timestamp",)
@@ -55,12 +42,7 @@ class ResultResponse(_message.Message):
     result: Result
     code: int
     message: str
-    def __init__(
-        self,
-        result: _Optional[_Union[Result, str]] = ...,
-        code: _Optional[int] = ...,
-        message: _Optional[str] = ...,
-    ) -> None: ...
+    def __init__(self, result: _Optional[_Union[Result, str]] = ..., code: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
 
 class ScheduleMessage(_message.Message):
     __slots__ = ("weekday", "start_time", "end_time")
@@ -70,12 +52,7 @@ class ScheduleMessage(_message.Message):
     weekday: int
     start_time: str
     end_time: str
-    def __init__(
-        self,
-        weekday: _Optional[int] = ...,
-        start_time: _Optional[str] = ...,
-        end_time: _Optional[str] = ...,
-    ) -> None: ...
+    def __init__(self, weekday: _Optional[int] = ..., start_time: _Optional[str] = ..., end_time: _Optional[str] = ...) -> None: ...
 
 class QueryResponse(_message.Message):
     __slots__ = ("name", "playtime")
@@ -83,9 +60,7 @@ class QueryResponse(_message.Message):
     PLAYTIME_FIELD_NUMBER: _ClassVar[int]
     name: str
     playtime: int
-    def __init__(
-        self, name: _Optional[str] = ..., playtime: _Optional[int] = ...
-    ) -> None: ...
+    def __init__(self, name: _Optional[str] = ..., playtime: _Optional[int] = ...) -> None: ...
 
 class RegisterRequest(_message.Message):
     __slots__ = ("member_id", "name")
@@ -93,9 +68,7 @@ class RegisterRequest(_message.Message):
     NAME_FIELD_NUMBER: _ClassVar[int]
     member_id: int
     name: str
-    def __init__(
-        self, member_id: _Optional[int] = ..., name: _Optional[str] = ...
-    ) -> None: ...
+    def __init__(self, member_id: _Optional[int] = ..., name: _Optional[str] = ...) -> None: ...
 
 class ScheduleRequest(_message.Message):
     __slots__ = ("weekday",)

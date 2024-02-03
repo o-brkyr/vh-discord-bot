@@ -31,29 +31,28 @@ service Disco {
 }
 
 enum Result {
-    RESULT_OK = 0;
-    RESULT_ERROR = 1;
+  RESULT_OK = 0;
+  RESULT_ERROR = 1;
 }
 
 message Empty {
 }
 
 message PlayerRequest {
-  uint64 userid = 1;
-  uint64 timestamp = 2;
-  string name = 3;
-  optional string extra_name = 4;
-  optional string extra_message = 5;
+  uint64 timestamp = 1;
+  string name = 2;
+  optional string extra_name = 3;
+  optional string extra_message = 4;
 }
 
 message WithTime {
-    uint64 timestamp = 1;
+  uint64 timestamp = 1;
 }
 
 message ResultResponse {
-    Result result = 1;
-    optional uint32 code = 2;
-    optional string message = 3;
+  Result result = 1;
+  optional uint32 code = 2;
+  optional string message = 3;
 }
 
 message ScheduleMessage {
