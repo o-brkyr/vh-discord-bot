@@ -1,7 +1,24 @@
 from datetime import time
 from typing import Iterable, Tuple
 
+import constants
 from discord import Colour, Embed
+
+
+def register_member(name: str) -> Embed:
+    return Embed(
+        title="MEMBER REGISTERED",
+        colour=Colour.gold(),
+        description=f"Succesfully registered '{name}'",
+    )
+
+
+def register_character(character_name: str, member_name: str) -> Embed:
+    return Embed(
+        title="CHARACTER REGISTERED",
+        colour=Colour.gold(),
+        description=f"Succesfully registered the character '{character_name}'",
+    )
 
 
 def player_join(name: str, member_name: str | None) -> Embed:
@@ -28,21 +45,23 @@ def player_leave(name: str, member_name: str | None) -> Embed:
 def error(error) -> Embed:
     embed = Embed(
         title="ERROR", colour=Colour.red(), description="Something went wrong"
-    ).add_field("Description", error)
+    ).add_field(name="Description", value=error)
     return embed
 
 
 def start() -> Embed:
     embed = Embed(
-        title="SERVER ONLINE", colour=Colour.green(), description="Server is now online"
+        title=f"{constants.STATUS_STARTED} SERVER ONLINE",
+        colour=Colour.green(),
+        description="Server is now online",
     )
     return embed
 
 
 def stopped() -> Embed:
     embed = Embed(
-        title="SERVER OFFLINE",
-        colour=Colour.dark_grey(),
+        title=f"{constants.STATUS_DEAD} SERVER OFFLINE",
+        colour=Colour.dark_gray(),
         description="Sever is now offline",
     )
     return embed
@@ -50,7 +69,7 @@ def stopped() -> Embed:
 
 def stopping() -> Embed:
     embed = Embed(
-        title="SERVER SHUTTING DOWN",
+        title=f"{constants.STATUS_INBETWEEN} SERVER SHUTTING DOWN",
         colour=Colour.orange(),
         description="Server is shutting down...",
     )
@@ -59,9 +78,9 @@ def stopping() -> Embed:
 
 def starting() -> Embed:
     embed = Embed(
-        title="SERVER STARTING",
+        title=f"{constants.STATUS_INBETWEEN} SERVER STARTING",
         colour=Colour.orange(),
-        description="Server is starting up...",
+        description="Server is starting up. This takes around 5 minutes.",
     )
     return embed
 

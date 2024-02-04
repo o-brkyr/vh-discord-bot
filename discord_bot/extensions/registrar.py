@@ -5,6 +5,7 @@ from discord.ext import commands
 from generated import disco_pb2_grpc
 from generated.disco_pb2 import RegisterRequest, Result, ResultResponse
 from settings import SETTINGS
+from utils import embeds
 
 from discord_bot.extensions.cog_utils import WithBotMixin
 
@@ -44,11 +45,15 @@ class RegistrationCog(WithBotMixin, commands.Cog, name=COG_NAME):
                     RegisterRequest(name=character_name, member_id=ctx.author.id)
                 )
                 if response.result == Result.RESULT_OK:
-                    await ctx.send(response.message)
+                    await ctx.send(
+                        embed=embeds.register_character(
+                            response.message, ctx.author.name
+                        )
+                    )
                 else:
-                    await ctx.send(f"Failed to register character: {response.message}")
+                    await ctx.send(embed=embeds.error(response.message), ephemeral=True)
         except grpc.RpcError as rpc_error:
-            await ctx.send(f"RPC error occured: {rpc_error}")
+            await ctx.send(embed=embeds.error(rpc_error), ephemeral=True)
 
     @commands.hybrid_command()
     async def register_member(
@@ -71,8 +76,8 @@ class RegistrationCog(WithBotMixin, commands.Cog, name=COG_NAME):
                     )
                 )
                 if response.result == Result.RESULT_OK:
-                    await ctx.send(response.message)
+                    await ctx.send(embed=embeds.register_member(response.message))
                 else:
-                    await ctx.send(f"Failed to register member: {response.message}")
+                    await ctx.send(embed=embeds.error(response.message), ephemeral=True)
         except grpc.RpcError as rpc_error:
-            await ctx.send(f"RPC error occurred: {rpc_error}")
+            await ctx.send(embed=embeds.error(rpc_error), ephemeral=True)

@@ -176,6 +176,67 @@ class ScheduleCog(WithBotMixin, commands.Cog, name=COG_NAME):
         await ctx.send(embed=embed)
 
     @commands.hybrid_command()
+    async def add_schedule_to_day_fine(
+        self,
+        ctx: "Context",
+        weekday: Literal[
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ],
+        start_time: str,
+        end_time: str,
+    ):
+        """
+        Add a session to a day. Time must be in the format "HH:MM"
+        """
+        weekday_as_int = WEEKDAY_AS_INT_MAP.get(weekday, 0)
+
+        go_weekday_as_int = time_utils.weekday_from_python_to_go(weekday_as_int)
+
+        start_time = start_time.strip()
+        end_time = end_time.strip()
+
+        try:
+            start_time_time = time.fromisoformat(start_time)
+        except ValueError:
+            await ctx.send(
+                f"Invalid start time: {start_time}. Try the following format: '16:30'"
+            )
+            return
+
+        try:
+            end_time_time = time.fromisoformat(end_time)
+        except ValueError:
+            await ctx.send(
+                f"Invalid end time: {end_time}. Try the following format: '16:30'"
+            )
+            return
+
+        if end_time_time < start_time_time:
+            await ctx.send(
+                f"Invalid selection: End time '{end_time}' cannot be before start time '{start_time}'"
+            )
+            return
+
+        try:
+            with grpc.insecure_channel(
+                f"localhost:{SETTINGS.python_to_go_port}"
+            ) as channel:
+                stub = disco_pb2_grpc.DiscoStub(channel)
+                stub.SetDaySchedule(
+                    ScheduleMessage(
+                        weekday=go_weekday_as_int,
+                        start_time=start_time,
+                        end_time=end_time,
+                    )
+                )
+        except grpc.RpcError as rpc_error:
+            await ctx.send(f"Failed to start server: {rpc_error}")
+            return
+
+        embed = embeds.day_schedule(weekday, [(start_time_time, end_time_time)])
+        await ctx.send(embed=embed)
+
+    @commands.hybrid_command()
     async def clear_schedule_on_day(
         self,
         ctx: "Context",

@@ -41,5 +41,5 @@ async def get_or_create_valheimer_role(guild: "Guild") -> "Role":
 async def update_channel_title_with_status(guild: "Guild", status: Status) -> None:
     channel = await get_or_create_valheimer_channel(guild)
     name = build_channel_title(status)
-    print(f"New channel name = {name}")
+    print(f"New channel name = {name}, {status=}")
     await channel.edit(name=name)

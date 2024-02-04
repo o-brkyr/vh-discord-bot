@@ -2,8 +2,8 @@ from custom_types import Status
 
 CHANNEL_TITLE = "𝖛𝖆𝖑𝖍𝖊𝖎𝖒"
 
-STATUS_ONLINE = "🟢"
-STATUS_OFFLINE = "🔴"
+STATUS_STARTED = "🟢"
+STATUS_STOPPED = "🔴"
 STATUS_INBETWEEN = "🟠"
 STATUS_DEAD = "⚫"
 
@@ -11,8 +11,8 @@ ROLE_NAME = "𝔳𝔞𝔩𝔥𝔢𝔦𝔪𝔢𝔯"
 
 
 STATUS_TO_SYMBOL_MAP: dict[Status, str] = {
-    Status.OFFLINE: STATUS_OFFLINE,
-    Status.ONLINE: STATUS_ONLINE,
+    Status.STOPPED: STATUS_STOPPED,
+    Status.STARTED: STATUS_STARTED,
     Status.STARTING: STATUS_INBETWEEN,
     Status.STOPPING: STATUS_INBETWEEN,
 }
