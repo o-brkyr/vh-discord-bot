@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+service ValheimGo {
+  rpc GetDaySchedule(ScheduleRequest) returns (ScheduleMessage) {};
+  rpc GetWeekSchedule(ScheduleRequest) returns (stream ScheduleMessage) {};
+  rpc SetDaySchedule(ScheduleRequest) returns (ScheduleMessage) {};
+  rpc ClearDaySchedule(ScheduleRequest) returns (Empty) {};
+
+  rpc QueryPlayers(Empty) returns (QueryPlayersResponse) {};
+  rpc QueryStatus(Empty) returns (QueryStatusResponse) {};
+
+  rpc ForceStart(Empty) returns (Empty) {};
+  rpc ForceStop(Empty) returns (Empty) {};
+
+  rpc RegisterMember(RegisterRequest) returns (RegisterResponse) {};
+  rpc RegisterCharacter(RegisterRequest) returns (RegisterResponse) {};
+}
+
+message ScheduleMessage {
+  uint32 weekday = 1;
+  repeated Session sessions = 2;
+}
+
+message Session {
+  string start_time = 1;
+  string end_time = 2;
+  optional uint32 player_count = 3;
+}
+
+message ScheduleRequest {
+  optional uint32 weekday = 1;
+  optional Session session = 2;
+}
+
+message QueryPlayersResponse {
+  bool online = 1;
+  repeated PlayerData player_list = 2;
+}
+
+message PlayerData {
+  string char_name = 1;
+  optional string member_name = 2;
+  optional uint64 playtime_s = 3;
+}
+
+message QueryStatusResponse {
+  enum Status {
+    RESULT_STARTING = 0;
+    RESULT_STARTED = 1;
+    RESULT_STOPPING = 2;
+    RESULT_STOPPED = 3;
+    RESULT_ERROR = 4;
+  }
+  Status status = 1;
+}
+
+message RegisterRequest {
+  uint64 snowflake = 1;
+  optional string char_name = 2;
+}
+
+message RegisterResponse {
+  repeated PlayerData characters = 1;
+}

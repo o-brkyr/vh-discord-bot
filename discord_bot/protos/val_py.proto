@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+service ValheimPy {
+  rpc PlayerJoin(PlayerRequest) returns (Empty) {};
+  rpc PlayerLeave(PlayerRequest) returns (Empty) {};
+
+  rpc ServerSave(Empty) returns (Empty) {};
+
+  rpc OnStart(Empty) returns (Empty) {};
+  rpc OnStarted(StartedRequest) returns (Empty) {};
+
+  rpc OnStop(Empty) returns (Empty) {};
+  rpc OnStopped(Empty) returns (Empty) {};
+
+  rpc OnLastOrders(Empty) returns (Empty) {};
+  rpc OnError(Empty) returns (Empty) {};
+}
+
+message Error {
+  string message = 1;
+}
+
+message StartedRequest {
+  string world_name = 1;
+  string server_name = 2;
+  string password = 3;
+  string ip_address = 4;
+  string port = 5;
+}
+
+message PlayerRequest {
+  string char_name = 1;
+  optional string member_name = 2;
+}
