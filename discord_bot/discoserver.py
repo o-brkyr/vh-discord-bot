@@ -28,6 +28,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
     def __init__(self, bot: "Bot"):
         self.bot = bot
         self.status = Status.STOPPED
+        log.info(f'Initialised gRPC server')
 
     def _get_all_text_channels(self) -> Iterable["TextChannel"]:
         channel_commands: extensions_channel.ChannelCommands = self.bot.get_cog(
@@ -75,7 +76,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
         """
         Called when the server has reported that the game has saved
         """
-        log.info("Recived 'OnServerStart' RPC call")
+        log.info("Recived 'OnServerSave' RPC call")
         return Empty()
 
     async def OnServerStart(self, request: "WithTime", context) -> Empty:
@@ -84,7 +85,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
         """
         log.info("Recived 'OnServerStart' RPC call")
 
-        self._update_status(Status.STARTING)
+        # await self._update_status(Status.STARTING)
         for channel in self._get_all_text_channels():
             await channel.send(embed=_starting_embed())
 
@@ -96,7 +97,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
         """
         log.info("Recieved 'OnServerStarted' RPC call")
 
-        self._update_status(Status.STARTED)
+        # await self._update_status(Status.STARTED)
         for channel in self._get_all_text_channels():
             await channel.send(embed=_started_embed())
 
@@ -108,7 +109,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
         """
         log.info("Recived 'OnServerStop' RPC call")
 
-        self._update_status(Status.STOPPING)
+        # await self._update_status(Status.STOPPING)
         for channel in self._get_all_text_channels():
             await channel.send(embed=_stopping_embed())
 
@@ -120,7 +121,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
         """
         log.info("Recived 'OnServerStopped' RPC call")
 
-        self._update_status(Status.STOPPED)
+        # await self._update_status(Status.STOPPED)
         for channel in self._get_all_text_channels():
             await channel.send(embed=_stopped_embed())
 
