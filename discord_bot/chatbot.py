@@ -17,7 +17,7 @@ intents.members = True
 
 chat_bot = commands.Bot(command_prefix="$", intents=intents)
 
-extensions = ["reloader", "sync", "lifecycle", "registrar", "channel", "schedule"]
+extensions = ["lifecycle", "registrar", "channel", "schedule", "helpers"]
 
 
 @chat_bot.event

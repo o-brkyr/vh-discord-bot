@@ -17,11 +17,9 @@ import logging
 
 log = logging.getLogger(__name__)
 
-COG_NAME = "Schedule cog"
-
 
 async def setup(bot: commands.Bot):
-    await bot.remove_cog(COG_NAME)
+    await bot.remove_cog(ScheduleCog.__name__)
     await bot.add_cog(ScheduleCog(bot))
 
 
@@ -72,9 +70,9 @@ END_LITERALS = Literal[
 ]
 
 
-class ScheduleCog(WithBotMixin, commands.Cog, name=COG_NAME):
-    def cog_load(self):
-        log.info("Loaded cog")
+class ScheduleCog(WithBotMixin, commands.Cog):
+    async def cog_load(self):
+        log.info(f"Initialised {self.__cog_name__}")
 
     @commands.hybrid_command()
     async def get_schedule_for_day(

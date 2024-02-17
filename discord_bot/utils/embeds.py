@@ -1,7 +1,6 @@
 from datetime import time
 from typing import Iterable, Tuple
 
-import constants
 from discord import Colour, Embed
 
 
@@ -21,67 +20,10 @@ def register_character(character_name: str, member_name: str) -> Embed:
     )
 
 
-def player_join(name: str, member_name: str | None) -> Embed:
-    description = (
-        f"{member_name} has joined the server as {name}."
-        if member_name
-        else f"{name} has joined the server."
-    )
-
-    embed = Embed(title="PLAYER JOINED", colour=Colour.green(), description=description)
-    return embed
-
-
-def player_leave(name: str, member_name: str | None) -> Embed:
-    description = (
-        f"{member_name} has left the server as {name}."
-        if member_name
-        else f"{name} has left the server."
-    )
-    embed = Embed(title="PLAYER LEFT", colour=Colour.purple(), description=description)
-    return embed
-
-
 def error(error) -> Embed:
     embed = Embed(
         title="ERROR", colour=Colour.red(), description="Something went wrong"
     ).add_field(name="Description", value=error)
-    return embed
-
-
-def start() -> Embed:
-    embed = Embed(
-        title=f"{constants.STATUS_STARTED} SERVER ONLINE",
-        colour=Colour.green(),
-        description="Server is now online",
-    )
-    return embed
-
-
-def stopped() -> Embed:
-    embed = Embed(
-        title=f"{constants.STATUS_DEAD} SERVER OFFLINE",
-        colour=Colour.dark_gray(),
-        description="Sever is now offline",
-    )
-    return embed
-
-
-def stopping() -> Embed:
-    embed = Embed(
-        title=f"{constants.STATUS_INBETWEEN} SERVER SHUTTING DOWN",
-        colour=Colour.orange(),
-        description="Server is shutting down...",
-    )
-    return embed
-
-
-def starting() -> Embed:
-    embed = Embed(
-        title=f"{constants.STATUS_INBETWEEN} SERVER STARTING",
-        colour=Colour.orange(),
-        description="Server is starting up. This takes around 5 minutes.",
-    )
     return embed
 
 

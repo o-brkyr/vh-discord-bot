@@ -21,13 +21,13 @@ COG_NAME = "RegistrationCog"
 
 
 async def setup(bot: commands.Bot):
-    await bot.remove_cog(COG_NAME)
+    await bot.remove_cog(RegistrationCog.__name__)
     await bot.add_cog(RegistrationCog(bot))
 
 
-class RegistrationCog(WithBotMixin, commands.Cog, name=COG_NAME):
-    def cog_load(self):
-        log.info("Loaded cog")
+class RegistrationCog(WithBotMixin, commands.Cog):
+    async def cog_load(self):
+        log.info(f"Initialised {self.__cog_name__}")
 
     @commands.hybrid_command()
     async def register_character(self, ctx: "Context", character_name: str) -> None:

@@ -17,17 +17,15 @@ import logging
 
 log = logging.getLogger(__name__)
 
-COG_NAME = "ServerLifecycleCommands"
-
 
 async def setup(bot: commands.Bot):
-    await bot.remove_cog(COG_NAME)
+    await bot.remove_cog(ServerLifecycleCommands.__name__)
     await bot.add_cog(ServerLifecycleCommands(bot))
 
 
-class ServerLifecycleCommands(WithBotMixin, commands.Cog, name=COG_NAME):
-    def cog_load(self):
-        log.info("Loaded cog")
+class ServerLifecycleCommands(WithBotMixin, commands.Cog):
+    async def cog_load(self):
+        log.info(f"Initialised {self.__cog_name__}")
 
     @commands.hybrid_command()
     async def force_start(self, ctx: "Context"):
