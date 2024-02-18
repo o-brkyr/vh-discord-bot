@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class DiscoServer(val_py_pb2_grpc.ValheimPyServicer):
+class ValheimPyServer(val_py_pb2_grpc.ValheimPyServicer):
     """
     A gRPC service that communicates to channels from the go server
     """
