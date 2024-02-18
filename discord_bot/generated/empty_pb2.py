@@ -7,21 +7,22 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x65mpty.proto\"\x07\n\x05\x45mptyB\x06Z\x04./pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x0b\x65mpty.proto"\x07\n\x05\x45mptyB\x06Z\x04./pbb\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'empty_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "empty_pb2", _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z\004./pb'
-  _globals['_EMPTY']._serialized_start=15
-  _globals['_EMPTY']._serialized_end=22
+    _globals["DESCRIPTOR"]._options = None
+    _globals["DESCRIPTOR"]._serialized_options = b"Z\004./pb"
+    _globals["_EMPTY"]._serialized_start = 15
+    _globals["_EMPTY"]._serialized_end = 22
 # @@protoc_insertion_point(module_scope)

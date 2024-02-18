@@ -7,37 +7,40 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cval_go.proto\x1a\x0b\x65mpty.proto\">\n\x0fScheduleMessage\x12\x0f\n\x07weekday\x18\x01 \x01(\r\x12\x1a\n\x08sessions\x18\x02 \x03(\x0b\x32\x08.Session\"[\n\x07Session\x12\x12\n\nstart_time\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\t\x12\x19\n\x0cplayer_count\x18\x03 \x01(\rH\x00\x88\x01\x01\x42\x0f\n\r_player_count\"_\n\x0fScheduleRequest\x12\x14\n\x07weekday\x18\x01 \x01(\rH\x00\x88\x01\x01\x12\x1e\n\x07session\x18\x02 \x01(\x0b\x32\x08.SessionH\x01\x88\x01\x01\x42\n\n\x08_weekdayB\n\n\x08_session\"H\n\x14QueryPlayersResponse\x12\x0e\n\x06online\x18\x01 \x01(\x08\x12 \n\x0bplayer_list\x18\x02 \x03(\x0b\x32\x0b.PlayerData\"q\n\nPlayerData\x12\x11\n\tchar_name\x18\x01 \x01(\t\x12\x18\n\x0bmember_name\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x17\n\nplaytime_s\x18\x03 \x01(\x04H\x01\x88\x01\x01\x42\x0e\n\x0c_member_nameB\r\n\x0b_playtime_s\"\xb0\x01\n\x13QueryStatusResponse\x12+\n\x06status\x18\x01 \x01(\x0e\x32\x1b.QueryStatusResponse.Status\"l\n\x06Status\x12\x13\n\x0fRESULT_STARTING\x10\x00\x12\x12\n\x0eRESULT_STARTED\x10\x01\x12\x13\n\x0fRESULT_STOPPING\x10\x02\x12\x12\n\x0eRESULT_STOPPED\x10\x03\x12\x10\n\x0cRESULT_ERROR\x10\x04\"J\n\x0fRegisterRequest\x12\x11\n\tsnowflake\x18\x01 \x01(\x04\x12\x16\n\tchar_name\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\x0c\n\n_char_name\"3\n\x10RegisterResponse\x12\x1f\n\ncharacters\x18\x01 \x03(\x0b\x32\x0b.PlayerData2\xfa\x03\n\tValheimGo\x12\x36\n\x0eGetDaySchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage\"\x00\x12\x39\n\x0fGetWeekSchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage\"\x00\x30\x01\x12\x36\n\x0eSetDaySchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage\"\x00\x12.\n\x10\x43learDaySchedule\x12\x10.ScheduleRequest\x1a\x06.Empty\"\x00\x12/\n\x0cQueryPlayers\x12\x06.Empty\x1a\x15.QueryPlayersResponse\"\x00\x12-\n\x0bQueryStatus\x12\x06.Empty\x1a\x14.QueryStatusResponse\"\x00\x12\x1e\n\nForceStart\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x1d\n\tForceStop\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x37\n\x0eRegisterMember\x12\x10.RegisterRequest\x1a\x11.RegisterResponse\"\x00\x12:\n\x11RegisterCharacter\x12\x10.RegisterRequest\x1a\x11.RegisterResponse\"\x00\x42\x06Z\x04./pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x0cval_go.proto\x1a\x0b\x65mpty.proto">\n\x0fScheduleMessage\x12\x0f\n\x07weekday\x18\x01 \x01(\r\x12\x1a\n\x08sessions\x18\x02 \x03(\x0b\x32\x08.Session"[\n\x07Session\x12\x12\n\nstart_time\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_time\x18\x02 \x01(\t\x12\x19\n\x0cplayer_count\x18\x03 \x01(\rH\x00\x88\x01\x01\x42\x0f\n\r_player_count"_\n\x0fScheduleRequest\x12\x14\n\x07weekday\x18\x01 \x01(\rH\x00\x88\x01\x01\x12\x1e\n\x07session\x18\x02 \x01(\x0b\x32\x08.SessionH\x01\x88\x01\x01\x42\n\n\x08_weekdayB\n\n\x08_session"H\n\x14QueryPlayersResponse\x12\x0e\n\x06online\x18\x01 \x01(\x08\x12 \n\x0bplayer_list\x18\x02 \x03(\x0b\x32\x0b.PlayerData"q\n\nPlayerData\x12\x11\n\tchar_name\x18\x01 \x01(\t\x12\x18\n\x0bmember_name\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x17\n\nplaytime_s\x18\x03 \x01(\x04H\x01\x88\x01\x01\x42\x0e\n\x0c_member_nameB\r\n\x0b_playtime_s"\xb0\x01\n\x13QueryStatusResponse\x12+\n\x06status\x18\x01 \x01(\x0e\x32\x1b.QueryStatusResponse.Status"l\n\x06Status\x12\x13\n\x0fRESULT_STARTING\x10\x00\x12\x12\n\x0eRESULT_STARTED\x10\x01\x12\x13\n\x0fRESULT_STOPPING\x10\x02\x12\x12\n\x0eRESULT_STOPPED\x10\x03\x12\x10\n\x0cRESULT_ERROR\x10\x04"J\n\x0fRegisterRequest\x12\x11\n\tsnowflake\x18\x01 \x01(\x04\x12\x16\n\tchar_name\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\x0c\n\n_char_name"3\n\x10RegisterResponse\x12\x1f\n\ncharacters\x18\x01 \x03(\x0b\x32\x0b.PlayerData2\xfa\x03\n\tValheimGo\x12\x36\n\x0eGetDaySchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage"\x00\x12\x39\n\x0fGetWeekSchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage"\x00\x30\x01\x12\x36\n\x0eSetDaySchedule\x12\x10.ScheduleRequest\x1a\x10.ScheduleMessage"\x00\x12.\n\x10\x43learDaySchedule\x12\x10.ScheduleRequest\x1a\x06.Empty"\x00\x12/\n\x0cQueryPlayers\x12\x06.Empty\x1a\x15.QueryPlayersResponse"\x00\x12-\n\x0bQueryStatus\x12\x06.Empty\x1a\x14.QueryStatusResponse"\x00\x12\x1e\n\nForceStart\x12\x06.Empty\x1a\x06.Empty"\x00\x12\x1d\n\tForceStop\x12\x06.Empty\x1a\x06.Empty"\x00\x12\x37\n\x0eRegisterMember\x12\x10.RegisterRequest\x1a\x11.RegisterResponse"\x00\x12:\n\x11RegisterCharacter\x12\x10.RegisterRequest\x1a\x11.RegisterResponse"\x00\x42\x06Z\x04./pbb\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'val_go_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "val_go_pb2", _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z\004./pb'
-  _globals['_SCHEDULEMESSAGE']._serialized_start=29
-  _globals['_SCHEDULEMESSAGE']._serialized_end=91
-  _globals['_SESSION']._serialized_start=93
-  _globals['_SESSION']._serialized_end=184
-  _globals['_SCHEDULEREQUEST']._serialized_start=186
-  _globals['_SCHEDULEREQUEST']._serialized_end=281
-  _globals['_QUERYPLAYERSRESPONSE']._serialized_start=283
-  _globals['_QUERYPLAYERSRESPONSE']._serialized_end=355
-  _globals['_PLAYERDATA']._serialized_start=357
-  _globals['_PLAYERDATA']._serialized_end=470
-  _globals['_QUERYSTATUSRESPONSE']._serialized_start=473
-  _globals['_QUERYSTATUSRESPONSE']._serialized_end=649
-  _globals['_QUERYSTATUSRESPONSE_STATUS']._serialized_start=541
-  _globals['_QUERYSTATUSRESPONSE_STATUS']._serialized_end=649
-  _globals['_REGISTERREQUEST']._serialized_start=651
-  _globals['_REGISTERREQUEST']._serialized_end=725
-  _globals['_REGISTERRESPONSE']._serialized_start=727
-  _globals['_REGISTERRESPONSE']._serialized_end=778
-  _globals['_VALHEIMGO']._serialized_start=781
-  _globals['_VALHEIMGO']._serialized_end=1287
+    _globals["DESCRIPTOR"]._options = None
+    _globals["DESCRIPTOR"]._serialized_options = b"Z\004./pb"
+    _globals["_SCHEDULEMESSAGE"]._serialized_start = 29
+    _globals["_SCHEDULEMESSAGE"]._serialized_end = 91
+    _globals["_SESSION"]._serialized_start = 93
+    _globals["_SESSION"]._serialized_end = 184
+    _globals["_SCHEDULEREQUEST"]._serialized_start = 186
+    _globals["_SCHEDULEREQUEST"]._serialized_end = 281
+    _globals["_QUERYPLAYERSRESPONSE"]._serialized_start = 283
+    _globals["_QUERYPLAYERSRESPONSE"]._serialized_end = 355
+    _globals["_PLAYERDATA"]._serialized_start = 357
+    _globals["_PLAYERDATA"]._serialized_end = 470
+    _globals["_QUERYSTATUSRESPONSE"]._serialized_start = 473
+    _globals["_QUERYSTATUSRESPONSE"]._serialized_end = 649
+    _globals["_QUERYSTATUSRESPONSE_STATUS"]._serialized_start = 541
+    _globals["_QUERYSTATUSRESPONSE_STATUS"]._serialized_end = 649
+    _globals["_REGISTERREQUEST"]._serialized_start = 651
+    _globals["_REGISTERREQUEST"]._serialized_end = 725
+    _globals["_REGISTERRESPONSE"]._serialized_start = 727
+    _globals["_REGISTERRESPONSE"]._serialized_end = 778
+    _globals["_VALHEIMGO"]._serialized_start = 781
+    _globals["_VALHEIMGO"]._serialized_end = 1287
 # @@protoc_insertion_point(module_scope)
