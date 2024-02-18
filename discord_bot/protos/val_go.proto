@@ -6,7 +6,7 @@ import "empty.proto";
 
 service ValheimGo {
   rpc GetDaySchedule(ScheduleRequest) returns (ScheduleMessage) {};
-  rpc GetWeekSchedule(ScheduleRequest) returns (stream ScheduleMessage) {};
+  rpc GetWeekSchedule(Empty) returns (stream ScheduleMessage) {};
   rpc SetDaySchedule(ScheduleRequest) returns (ScheduleMessage) {};
   rpc ClearDaySchedule(ScheduleRequest) returns (Empty) {};
 
@@ -16,7 +16,7 @@ service ValheimGo {
   rpc ForceStart(Empty) returns (Empty) {};
   rpc ForceStop(Empty) returns (Empty) {};
 
-  rpc RegisterMember(RegisterRequest) returns (RegisterResponse) {};
+  rpc RegisterMember(RegisterRequest) returns (RegisterMemberResponse) {};
   rpc RegisterCharacter(RegisterRequest) returns (RegisterResponse) {};
 }
 
@@ -58,6 +58,11 @@ message QueryStatusResponse {
   Status status = 1;
 }
 
+enum RegistrationStatus {
+  REGISTRATIONSTATUS_REGISTERED = 0;
+  REGISTRATIONSTATUS_ALREADY_REGISTERED =1;
+}
+
 message RegisterRequest {
   uint64 snowflake = 1;
   optional string char_name = 2;
@@ -65,4 +70,9 @@ message RegisterRequest {
 
 message RegisterResponse {
   repeated PlayerData characters = 1;
+  optional RegistrationStatus status = 2;
+}
+
+message RegisterMemberResponse {
+  RegistrationStatus status = 1;
 }

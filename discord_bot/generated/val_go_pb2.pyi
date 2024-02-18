@@ -11,6 +11,14 @@ from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class RegistrationStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    REGISTRATIONSTATUS_REGISTERED: _ClassVar[RegistrationStatus]
+    REGISTRATIONSTATUS_ALREADY_REGISTERED: _ClassVar[RegistrationStatus]
+
+REGISTRATIONSTATUS_REGISTERED: RegistrationStatus
+REGISTRATIONSTATUS_ALREADY_REGISTERED: RegistrationStatus
+
 class ScheduleMessage(_message.Message):
     __slots__ = ("weekday", "sessions")
     WEEKDAY_FIELD_NUMBER: _ClassVar[int]
@@ -108,9 +116,21 @@ class RegisterRequest(_message.Message):
     ) -> None: ...
 
 class RegisterResponse(_message.Message):
-    __slots__ = ("characters",)
+    __slots__ = ("characters", "status")
     CHARACTERS_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     characters: _containers.RepeatedCompositeFieldContainer[PlayerData]
+    status: RegistrationStatus
     def __init__(
-        self, characters: _Optional[_Iterable[_Union[PlayerData, _Mapping]]] = ...
+        self,
+        characters: _Optional[_Iterable[_Union[PlayerData, _Mapping]]] = ...,
+        status: _Optional[_Union[RegistrationStatus, str]] = ...,
+    ) -> None: ...
+
+class RegisterMemberResponse(_message.Message):
+    __slots__ = ("status",)
+    STATUS_FIELD_NUMBER: _ClassVar[int]
+    status: RegistrationStatus
+    def __init__(
+        self, status: _Optional[_Union[RegistrationStatus, str]] = ...
     ) -> None: ...

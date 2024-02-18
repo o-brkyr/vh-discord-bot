@@ -21,7 +21,7 @@ class ValheimGoStub(object):
         )
         self.GetWeekSchedule = channel.unary_stream(
             "/ValheimGo/GetWeekSchedule",
-            request_serializer=val__go__pb2.ScheduleRequest.SerializeToString,
+            request_serializer=empty__pb2.Empty.SerializeToString,
             response_deserializer=val__go__pb2.ScheduleMessage.FromString,
         )
         self.SetDaySchedule = channel.unary_unary(
@@ -57,7 +57,7 @@ class ValheimGoStub(object):
         self.RegisterMember = channel.unary_unary(
             "/ValheimGo/RegisterMember",
             request_serializer=val__go__pb2.RegisterRequest.SerializeToString,
-            response_deserializer=val__go__pb2.RegisterResponse.FromString,
+            response_deserializer=val__go__pb2.RegisterMemberResponse.FromString,
         )
         self.RegisterCharacter = channel.unary_unary(
             "/ValheimGo/RegisterCharacter",
@@ -139,7 +139,7 @@ def add_ValheimGoServicer_to_server(servicer, server):
         ),
         "GetWeekSchedule": grpc.unary_stream_rpc_method_handler(
             servicer.GetWeekSchedule,
-            request_deserializer=val__go__pb2.ScheduleRequest.FromString,
+            request_deserializer=empty__pb2.Empty.FromString,
             response_serializer=val__go__pb2.ScheduleMessage.SerializeToString,
         ),
         "SetDaySchedule": grpc.unary_unary_rpc_method_handler(
@@ -175,7 +175,7 @@ def add_ValheimGoServicer_to_server(servicer, server):
         "RegisterMember": grpc.unary_unary_rpc_method_handler(
             servicer.RegisterMember,
             request_deserializer=val__go__pb2.RegisterRequest.FromString,
-            response_serializer=val__go__pb2.RegisterResponse.SerializeToString,
+            response_serializer=val__go__pb2.RegisterMemberResponse.SerializeToString,
         ),
         "RegisterCharacter": grpc.unary_unary_rpc_method_handler(
             servicer.RegisterCharacter,
@@ -239,7 +239,7 @@ class ValheimGo(object):
             request,
             target,
             "/ValheimGo/GetWeekSchedule",
-            val__go__pb2.ScheduleRequest.SerializeToString,
+            empty__pb2.Empty.SerializeToString,
             val__go__pb2.ScheduleMessage.FromString,
             options,
             channel_credentials,
@@ -443,7 +443,7 @@ class ValheimGo(object):
             target,
             "/ValheimGo/RegisterMember",
             val__go__pb2.RegisterRequest.SerializeToString,
-            val__go__pb2.RegisterResponse.FromString,
+            val__go__pb2.RegisterMemberResponse.FromString,
             options,
             channel_credentials,
             insecure,
