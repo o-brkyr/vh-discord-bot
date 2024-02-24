@@ -1,17 +1,15 @@
-from datetime import datetime
 from typing import TYPE_CHECKING
 
 import grpc
 from discord.ext import commands
-from generated import disco_pb2_grpc
-from generated.disco_pb2 import WithTime
+from generated import val_go_pb2_grpc
+from generated.empty_pb2 import Empty
 from settings import SETTINGS
 
 from discord_bot.extensions.cog_utils import WithBotMixin
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context
-    from generated.disco_pb2 import ResultResponse
 
 import logging
 
@@ -37,20 +35,12 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
-                response: ResultResponse = stub.DoServerStart(
-                    WithTime(timestamp=int(datetime.now().timestamp()))
-                )
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
+                stub.ForceStart(Empty())
         except grpc.RpcError as rpc_error:
             await ctx.send(f"Failed to start server: {rpc_error}")
             return
-
-        if response.code != 200:
-            await ctx.send(
-                f"Error recieved - code {response.code}, message: '{response.message}'"
-            )
-        else:
-            await ctx.send("👍 got it fam", ephemeral=True)
+        await ctx.send("👍 got it fam", ephemeral=True)
 
     @commands.hybrid_command()
     async def force_stop(self, ctx: "Context"):
@@ -61,17 +51,10 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
-                response: ResultResponse = stub.DoServerShutdown(
-                    WithTime(timestamp=int(datetime.now().timestamp()))
-                )
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
+                stub.ForceStop(Empty())
         except grpc.RpcError as rpc_error:
             await ctx.send(f"Failed to shutdown server: {rpc_error}")
             return
 
-        if response.code != 200:
-            await ctx.send(
-                f"Error recieved - code {response.code}, message: '{response.message}'"
-            )
-        else:
-            await ctx.send("👍 got it fam", ephemeral=True)
+        await ctx.send("👍 got it fam", ephemeral=True)

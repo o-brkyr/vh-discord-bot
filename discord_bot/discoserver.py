@@ -5,19 +5,19 @@ import constants
 from custom_types import Status
 from discord import Colour, Embed
 from extensions import channel as extensions_channel
-from generated import disco_pb2_grpc
-from generated.disco_pb2 import Empty
+from generated import val_py_pb2_grpc
+from generated.empty_pb2 import Empty
 
 if TYPE_CHECKING:
     from discord import TextChannel
     from discord.ext.commands import Bot
-    from generated.disco_pb2 import PlayerRequest, WithTime
+    from generated.val_py_pb2 import PlayerRequest, StartedRequest
 
 
 log = logging.getLogger(__name__)
 
 
-class DiscoServer(disco_pb2_grpc.DiscoServicer):
+class ValheimPyServer(val_py_pb2_grpc.ValheimPyServicer):
     """
     A gRPC service that communicates to channels from the go server
     """
@@ -28,7 +28,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
     def __init__(self, bot: "Bot"):
         self.bot = bot
         self.status = Status.STOPPED
-        log.info(f'Initialised gRPC server')
+        log.info(f"Initialised gRPC server")
 
     def _get_all_text_channels(self) -> Iterable["TextChannel"]:
         channel_commands: extensions_channel.ChannelCommands = self.bot.get_cog(
@@ -47,19 +47,20 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
             if channel.name != new_title:
                 await channel.edit(name=new_title)
 
-    async def OnPlayerJoin(self, request: "PlayerRequest", context) -> "Empty":
+    async def PlayerJoin(self, request: "PlayerRequest", context) -> Empty:
         """
         Called when the server has reported that a player has left.
         """
         for channel in self._get_all_text_channels():
             await channel.send(
                 embed=_player_join_embed(
-                    request.name, request.extra_name if request.extra_name else None
+                    request.char_name,
+                    request.member_name if request.member_name else None,
                 )
             )
         return Empty()
 
-    async def OnPlayerLeave(self, request: "PlayerRequest", context) -> "Empty":
+    async def PlayerLeave(self, request: "PlayerRequest", context) -> Empty:
         """
         Called when the server has reported that a player has left.
         """
@@ -67,19 +68,20 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
         for channel in self._get_all_text_channels():
             await channel.send(
                 embed=_player_leave_embed(
-                    request.name, request.extra_name if request.extra_name else None
+                    request.char_name,
+                    request.member_name if request.member_name else None,
                 )
             )
         return Empty()
 
-    async def OnServerSave(self, request: "WithTime", context) -> "Empty":
+    async def ServerSave(self, request: Empty, context) -> Empty:
         """
         Called when the server has reported that the game has saved
         """
         log.info("Recived 'OnServerSave' RPC call")
         return Empty()
 
-    async def OnServerStart(self, request: "WithTime", context) -> Empty:
+    async def OnStart(self, request: Empty, context) -> Empty:
         """
         Called when the server has been told to start.
         """
@@ -91,7 +93,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
 
         return Empty()
 
-    async def OnServerStarted(self, request: "WithTime", context) -> Empty:
+    async def OnStarted(self, request: "StartedRequest", context) -> Empty:
         """
         Called when the server has reported that the game is loaded and ready.
         """
@@ -103,7 +105,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
 
         return Empty()
 
-    async def OnServerStop(self, request: "WithTime", context) -> Empty:
+    async def OnStop(self, request: Empty, context) -> Empty:
         """
         Called when the server has been told to stop.
         """
@@ -115,7 +117,7 @@ class DiscoServer(disco_pb2_grpc.DiscoServicer):
 
         return Empty()
 
-    async def OnServerStopped(self, request: "WithTime", context) -> Empty:
+    async def OnStopped(self, request: Empty, context) -> Empty:
         """
         Called when the server has reported that the game is stopped.
         """

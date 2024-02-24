@@ -2,8 +2,14 @@ from typing import TYPE_CHECKING
 
 import grpc
 from discord.ext import commands
-from generated import disco_pb2_grpc
-from generated.disco_pb2 import RegisterRequest, Result, ResultResponse
+from generated import val_go_pb2_grpc
+from generated.empty_pb2 import Empty
+from generated.val_go_pb2 import (
+    RegisterMemberResponse,
+    RegisterRequest,
+    RegisterResponse,
+    RegistrationStatus,
+)
 from settings import SETTINGS
 from utils import embeds
 
@@ -11,7 +17,6 @@ from discord_bot.extensions.cog_utils import WithBotMixin
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context
-    from generated.disco_pb2 import ResultResponse
 
 import logging
 
@@ -40,20 +45,20 @@ class RegistrationCog(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
-                response: ResultResponse = stub.DoRegisterCharacter(
-                    RegisterRequest(name=character_name, member_id=ctx.author.id)
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
+                response: RegisterResponse = stub.RegisterCharacter(
+                    RegisterRequest(char_name=character_name, snowflake=ctx.author.id)
                 )
-                if response.result == Result.RESULT_OK:
-                    await ctx.send(
-                        embed=embeds.register_character(
-                            response.message, ctx.author.name
-                        )
-                    )
-                else:
-                    await ctx.send(embed=embeds.error(response.message), ephemeral=True)
         except grpc.RpcError as rpc_error:
             await ctx.send(embed=embeds.error(rpc_error), ephemeral=True)
+        else:
+            if response.status == RegistrationStatus.REGISTRATIONSTATUS_REGISTERED:
+                await ctx.send(
+                    embed=embeds.register_character(response.characters[0].char_name),
+                    ephemeral=True,
+                )
+            else:
+                await ctx.send(embed=embeds.error(response.message), ephemeral=True)
 
     @commands.hybrid_command()
     async def register_member(
@@ -69,15 +74,16 @@ class RegistrationCog(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
-                response: ResultResponse = stub.DoRegisterMember(
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
+                response: RegisterMemberResponse = stub.RegisterMember(
                     RegisterRequest(
-                        name=ctx.author.global_name, member_id=ctx.author.id
+                        char_name=ctx.author.global_name, snowflake=ctx.author.id
                     )
                 )
-                if response.result == Result.RESULT_OK:
-                    await ctx.send(embed=embeds.register_member(response.message))
-                else:
-                    await ctx.send(embed=embeds.error(response.message), ephemeral=True)
         except grpc.RpcError as rpc_error:
             await ctx.send(embed=embeds.error(rpc_error), ephemeral=True)
+        else:
+            if response.status == RegistrationStatus.REGISTRATIONSTATUS_REGISTERED:
+                await ctx.send(embed=embeds.register_member(response.message))
+            else:
+                await ctx.send(embed=embeds.error(response.message), ephemeral=True)

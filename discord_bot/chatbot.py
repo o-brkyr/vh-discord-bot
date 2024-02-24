@@ -4,8 +4,8 @@ import logging
 import discord
 import grpc
 from discord.ext import commands
-from discoserver import DiscoServer
-from generated import disco_pb2_grpc
+from discoserver import ValheimPyServer
+from generated import val_py_pb2_grpc
 from settings import SETTINGS
 
 log = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ async def on_ready():
 
 async def serve_grpc():
     server = grpc.aio.server()
-    disco_pb2_grpc.add_DiscoServicer_to_server(DiscoServer(chat_bot), server)
+    val_py_pb2_grpc.add_ValheimPyServicer_to_server(ValheimPyServer(chat_bot), server)
     server.add_insecure_port(f"localhost:{SETTINGS.go_to_python_port}")
     await server.start()
     await server.wait_for_termination()

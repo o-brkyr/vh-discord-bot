@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, List, Literal, Tuple
 
 import grpc
 from discord.ext import commands
-from generated import disco_pb2_grpc
-from generated.disco_pb2 import ScheduleMessage, ScheduleRequest
+from generated import val_go_pb2_grpc
+from generated.val_go_pb2 import ScheduleMessage, ScheduleRequest, Session
 from settings import SETTINGS
 from utils import embeds, time_utils
 
@@ -91,18 +91,18 @@ class ScheduleCog(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
                 session_times: List[Tuple[time, time]] = []
-                for resp in stub.GetDaySchedule(
+                resp: ScheduleMessage = stub.GetDaySchedule(
                     ScheduleRequest(weekday=go_weekday_as_int)
-                ):
-                    resp: ScheduleMessage
-                    session_times.append(
-                        (
-                            time.fromisoformat(resp.start_time),
-                            time.fromisoformat(resp.end_time),
-                        )
+                )
+                session_times = [
+                    (
+                        time.fromisoformat(session.start_time),
+                        time.fromisoformat(session.end_time),
                     )
+                    for session in resp.sessions
+                ]
         except grpc.RpcError as rpc_error:
             await ctx.send(f"Failed to start server: {rpc_error}")
             return
@@ -158,12 +158,11 @@ class ScheduleCog(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
                 stub.SetDaySchedule(
-                    ScheduleMessage(
+                    ScheduleRequest(
                         weekday=go_weekday_as_int,
-                        start_time=start_time,
-                        end_time=end_time,
+                        session=Session(start_time=start_time, end_time=end_time),
                     )
                 )
         except grpc.RpcError as rpc_error:
@@ -219,12 +218,14 @@ class ScheduleCog(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
                 stub.SetDaySchedule(
                     ScheduleMessage(
                         weekday=go_weekday_as_int,
-                        start_time=start_time,
-                        end_time=end_time,
+                        session=Session(
+                            start_time=start_time,
+                            end_time=end_time,
+                        ),
                     )
                 )
         except grpc.RpcError as rpc_error:
@@ -252,7 +253,7 @@ class ScheduleCog(WithBotMixin, commands.Cog):
             with grpc.insecure_channel(
                 f"localhost:{SETTINGS.python_to_go_port}"
             ) as channel:
-                stub = disco_pb2_grpc.DiscoStub(channel)
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
                 stub.ClearDaySchedule(ScheduleRequest(weekday=go_weekday_as_int))
         except grpc.RpcError as rpc_error:
             await ctx.send(f"Failed to start server: {rpc_error}")
