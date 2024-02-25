@@ -6,7 +6,7 @@ from generated import val_go_pb2_grpc
 from generated.empty_pb2 import Empty
 from settings import SETTINGS
 
-from discord_bot.extensions.cog_utils import WithBotMixin
+from discord_bot.extensions.cog_utils import WithBotMixin, is_guild_owner
 
 if TYPE_CHECKING:
     from discord.ext.commands import Context
@@ -26,6 +26,7 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog):
         log.info(f"Initialised {self.__cog_name__}")
 
     @commands.hybrid_command()
+    @commands.check_any(commands.is_owner(), is_guild_owner())
     async def force_start(self, ctx: "Context"):
         """
         Forces the server to start
@@ -43,6 +44,7 @@ class ServerLifecycleCommands(WithBotMixin, commands.Cog):
         await ctx.send("👍 got it fam", ephemeral=True)
 
     @commands.hybrid_command()
+    @commands.check_any(commands.is_owner(), is_guild_owner())
     async def force_stop(self, ctx: "Context"):
         """
         Forces the server to shutdown

@@ -31,6 +31,7 @@ class ChannelCommands(WithBotMixin, commands.Cog):
         self.GUILD_ID_TO_GUILD_MAP = {}
         self.GUILD_ID_TO_ROLE_MAP = {}
 
+    @staticmethod
     async def _get_or_create_text_channel_for_guild(guild: "Guild") -> "TextChannel":
         try:
             channel = next((ch for ch in guild.channels if CHANNEL_TITLE in ch.name))
@@ -38,6 +39,7 @@ class ChannelCommands(WithBotMixin, commands.Cog):
             channel = await guild.create_text_channel(name=CHANNEL_TITLE, position=0)
         return channel
 
+    @staticmethod
     async def _get_or_create_valheimer_role_for_guild(guild: "Guild") -> "Role":
         try:
             role = next((role for role in guild.roles if role.name == ROLE_NAME))
@@ -53,7 +55,7 @@ class ChannelCommands(WithBotMixin, commands.Cog):
     async def get_text_channel_for_guild(self, guild_id: int) -> "TextChannel":
         if (channel := self.GUILD_ID_TO_CHANNEL_MAP.get(guild_id, None)) is None:
             # We haven't saved a guild somehow
-            guild = await self.bot.get_guild(guild_id)
+            guild = self.bot.get_guild(guild_id)
             channel = await self._get_or_create_text_channel_for_guild(guild)
             self.GUILD_ID_TO_GUILD_MAP[guild.id] = guild
             self.GUILD_ID_TO_CHANNEL_MAP[guild.id] = channel
@@ -62,7 +64,7 @@ class ChannelCommands(WithBotMixin, commands.Cog):
     async def get_role_for_guild(self, guild_id: int) -> "Role":
         if (role := self.GUILD_ID_TO_ROLE_MAP.get(guild_id, None)) is None:
             # We haven't got a role for this bad boy
-            guild = await self.bot.get_guild(guild_id)
+            guild = self.bot.get_guild(guild_id)
             role = await self._get_or_create_valheimer_role_for_guild(guild)
             self.GUILD_ID_TO_GUILD_MAP[guild.id] = guild
             self.GUILD_ID_TO_ROLE_MAP[guild.id] = role

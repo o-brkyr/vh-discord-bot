@@ -1,9 +1,12 @@
+import calendar
 from datetime import time
 from typing import TYPE_CHECKING, List, Literal, Tuple
 
 import grpc
+from discord import Colour, Embed
 from discord.ext import commands
 from generated import val_go_pb2_grpc
+from generated.empty_pb2 import Empty
 from generated.val_go_pb2 import ScheduleMessage, ScheduleRequest, Session
 from settings import SETTINGS
 from utils import embeds, time_utils
@@ -110,6 +113,47 @@ class ScheduleCog(WithBotMixin, commands.Cog):
         session_times = sorted(session_times, key=lambda x: x[0])
 
         embed = embeds.day_schedule(weekday, session_times)
+        await ctx.send(embed=embed)
+
+    @commands.hybrid_command()
+    async def get_week_schedule(self, ctx: "Context"):
+        """
+        Get the week's schedule
+        """
+
+        days: dict[int, list[tuple[time, time]]] = {}
+
+        try:
+            with grpc.insecure_channel(
+                f"localhost:{SETTINGS.python_to_go_port}"
+            ) as channel:
+                stub = val_go_pb2_grpc.ValheimGoStub(channel)
+                for day_schedule in stub.GetWeekSchedule(Empty()):
+                    day_schedule: ScheduleMessage
+                    weekday = time_utils.weekday_from_go_to_python(day_schedule.weekday)
+                    days[weekday] = [
+                        (
+                            time.fromisoformat(session.start_time),
+                            time.fromisoformat(session.end_time),
+                        )
+                        for session in day_schedule.sessions
+                    ]
+        except grpc.RpcError as rpc_error:
+            await ctx.send(f"Failed to start server: {rpc_error}")
+            return
+        embed = Embed(
+            colour=Colour.blue(),
+            title="📅 Week schedule",
+        )
+        for weekday_as_int, sessions in days.items():
+            as_weekday = calendar.day_name[weekday_as_int]
+            weekday_sessions = [
+                f'# {i+1}: From `{session[0].strftime('%H:%M')}` until `{session[1].strftime('%H:%M')}`'
+                for i, session in enumerate(sessions)
+            ]
+            embed.add_field(
+                name=as_weekday, value="\n".join(weekday_sessions), inline=False
+            )
         await ctx.send(embed=embed)
 
     @commands.hybrid_command()
@@ -220,7 +264,7 @@ class ScheduleCog(WithBotMixin, commands.Cog):
             ) as channel:
                 stub = val_go_pb2_grpc.ValheimGoStub(channel)
                 stub.SetDaySchedule(
-                    ScheduleMessage(
+                    ScheduleRequest(
                         weekday=go_weekday_as_int,
                         session=Session(
                             start_time=start_time,

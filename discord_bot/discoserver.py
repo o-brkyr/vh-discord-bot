@@ -9,7 +9,7 @@ from generated import val_py_pb2_grpc
 from generated.empty_pb2 import Empty
 
 if TYPE_CHECKING:
-    from discord import TextChannel
+    from discord import TextChannel, Role
     from discord.ext.commands import Bot
     from generated.val_py_pb2 import PlayerRequest, StartedRequest
 
@@ -99,9 +99,28 @@ class ValheimPyServer(val_py_pb2_grpc.ValheimPyServicer):
         """
         log.info("Recieved 'OnServerStarted' RPC call")
 
-        # await self._update_status(Status.STARTED)
-        for channel in self._get_all_text_channels():
-            await channel.send(embed=_started_embed())
+        channel_commands: extensions_channel.ChannelCommands = self.bot.get_cog(
+            extensions_channel.ChannelCommands.__name__
+        )
+        if channel_commands is None:
+            raise ValueError("Cog not loaded")
+
+        for guild in self.bot.guilds:
+            text_channel = await channel_commands.get_text_channel_for_guild(
+                guild_id=guild.id
+            )
+            valheimer_role = await channel_commands.get_role_for_guild(
+                guild_id=guild.id
+            )
+            await text_channel.send(
+                embed=_started_embed(
+                    valheimer_role=valheimer_role,
+                    world=request.world_name,
+                    password=request.password,
+                    ip=request.ip_address,
+                    port=request.port,
+                )
+            )
 
         return Empty()
 
@@ -132,34 +151,37 @@ class ValheimPyServer(val_py_pb2_grpc.ValheimPyServicer):
 
 def _starting_embed() -> Embed:
     embed = Embed(
-        title=f"{constants.STATUS_INBETWEEN} SERVER STARTING",
+        title=f"{constants.STATUS_INBETWEEN} Server starting",
         colour=Colour.orange(),
-        description="Server is starting up. This takes around 5 minutes.",
+        description="The server is starting up. This takes around 5 minutes.",
     )
     return embed
 
 
-def _started_embed() -> Embed:
+def _started_embed(
+    ip: str, port: str, password: str, world: str, valheimer_role: "Role"
+) -> Embed:
     embed = Embed(
-        title=f"{constants.STATUS_STARTED} SERVER ONLINE",
+        title=f"{constants.STATUS_STARTED} Server online",
         colour=Colour.green(),
-        description="Server is now online",
-    )
+        description=f"{valheimer_role.mention} The server is now online!\n"
+        f"Connect to the IP `{ip}:{port}` with the password `{password}`",
+    ).add_field(name="World name", value=f"`{world}`")
     return embed
 
 
 def _stopping_embed() -> Embed:
     embed = Embed(
-        title=f"{constants.STATUS_INBETWEEN} SERVER SHUTTING DOWN",
+        title=f"{constants.STATUS_INBETWEEN} Server shutting down",
         colour=Colour.orange(),
-        description="Server is shutting down...",
+        description="The server is shutting down...",
     )
     return embed
 
 
 def _stopped_embed() -> Embed:
     embed = Embed(
-        title=f"{constants.STATUS_DEAD} SERVER OFFLINE",
+        title=f"{constants.STATUS_DEAD} Server offline",
         colour=Colour.dark_gray(),
         description="Sever is now offline",
     )
@@ -168,20 +190,24 @@ def _stopped_embed() -> Embed:
 
 def _player_join_embed(name: str, member_name: str | None) -> Embed:
     description = (
-        f"{member_name} has joined the server as {name}."
+        f"{name} joined the server! (@{member_name}) ."
         if member_name
-        else f"{name} has joined the server."
+        else f"{name} joined the server!"
     )
 
-    embed = Embed(title="PLAYER JOINED", colour=Colour.green(), description=description)
+    embed = Embed(
+        title="🏹 Player joined", colour=Colour.green(), description=description
+    )
     return embed
 
 
 def _player_leave_embed(name: str, member_name: str | None) -> Embed:
     description = (
-        f"{member_name} has left the server as {name}."
+        f"{name} left the server. (@{member_name})."
         if member_name
-        else f"{name} has left the server."
+        else f"{name} left the server."
     )
-    embed = Embed(title="PLAYER LEFT", colour=Colour.purple(), description=description)
+    embed = Embed(
+        title="🏹 Player left", colour=Colour.purple(), description=description
+    )
     return embed
